@@ -7,7 +7,7 @@ import { products } from "./products";
 import { users } from "./auth";
 
 // Locations
-export const locations = pgTable("locations", {
+export const locations: any = pgTable("locations", {
 	...defaultFields,
 	organizationId: uuid("organization_id")
 		.notNull()
@@ -15,7 +15,7 @@ export const locations = pgTable("locations", {
 	name: text("name").notNull(),
 	code: text("code").notNull(),
 	locationType: text("location_type").default("internal").notNull(), // internal, customer, supplier, transit
-	parentLocationId: uuid("parent_location_id").references(() => locations.id, { onDelete: "set null" }),
+	parentLocationId: uuid("parent_location_id"),
 	isActive: boolean("is_active").default(true),
 });
 

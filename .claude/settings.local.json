@@ -14,7 +14,12 @@
       "Bash(git add:*)",
       "Bash(git reset:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(erp\\): add ERP enums and role schema\n\n- Add all status enums for sales, production, inventory\n- Add ERP role system \\(sales, planner, buyer, worker, supervisor, finance, admin\\)\n- Create userErpRoles junction table for multi-role support\n- Generate initial database migration with all ERP enums\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(pnpm --filter @starter/core typecheck:*)",
+      "Bash(pnpm --filter @starter/core-web typecheck)",
+      "Bash(pnpm --filter @starter/web typecheck:*)",
+      "Bash(timeout 60 pnpm typecheck:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": []
   }
