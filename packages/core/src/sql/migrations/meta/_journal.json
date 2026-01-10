@@ -15,6 +15,13 @@
       "when": 1768064455072,
       "tag": "0001_mean_hellion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768078479381,
+      "tag": "0002_tricky_tomas",
+      "breakpoints": true
     }
   ]
 }
