@@ -1,5 +1,5 @@
 import {
-	protectedProcedureWithOrganization,
+	plannerProcedure,
 	createTRPCRouter,
 } from "@starter/core-web/src/trpc/trpc";
 import { z } from "zod";
@@ -14,13 +14,13 @@ import {
 
 export const inventoryRouter = createTRPCRouter({
 	// Locations
-	createLocation: protectedProcedureWithOrganization
+	createLocation: plannerProcedure
 		.input(CreateLocationSchema)
 		.mutation(async ({ ctx, input }) => {
 			return inventoryFunctions.createLocation(ctx, input);
 		}),
 
-	updateLocation: protectedProcedureWithOrganization
+	updateLocation: plannerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -30,11 +30,11 @@ export const inventoryRouter = createTRPCRouter({
 			return inventoryFunctions.updateLocation(ctx, input);
 		}),
 
-	listLocations: protectedProcedureWithOrganization.query(async ({ ctx }) => {
+	listLocations: plannerProcedure.query(async ({ ctx }) => {
 		return inventoryFunctions.listLocations(ctx);
 	}),
 
-	getLocation: protectedProcedureWithOrganization
+	getLocation: plannerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -45,11 +45,11 @@ export const inventoryRouter = createTRPCRouter({
 		}),
 
 	// Stock
-	listStock: protectedProcedureWithOrganization.query(async ({ ctx }) => {
+	listStock: plannerProcedure.query(async ({ ctx }) => {
 		return inventoryFunctions.listStock(ctx);
 	}),
 
-	getStockByProduct: protectedProcedureWithOrganization
+	getStockByProduct: plannerProcedure
 		.input(
 			z.object({
 				productId: z.string().uuid(),
@@ -60,19 +60,19 @@ export const inventoryRouter = createTRPCRouter({
 		}),
 
 	// Stock Moves
-	createStockMove: protectedProcedureWithOrganization
+	createStockMove: plannerProcedure
 		.input(CreateStockMoveSchema)
 		.mutation(async ({ ctx, input }) => {
 			return inventoryFunctions.createStockMove(ctx, input);
 		}),
 
-	adjustStock: protectedProcedureWithOrganization
+	adjustStock: plannerProcedure
 		.input(AdjustStockSchema)
 		.mutation(async ({ ctx, input }) => {
 			return inventoryFunctions.adjustStock(ctx, input);
 		}),
 
-	listStockMoves: protectedProcedureWithOrganization
+	listStockMoves: plannerProcedure
 		.input(ListStockMovesSchema)
 		.query(async ({ ctx, input }) => {
 			return inventoryFunctions.listStockMoves(ctx, input);

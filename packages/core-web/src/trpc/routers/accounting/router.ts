@@ -1,5 +1,5 @@
 import {
-	protectedProcedureWithOrganization,
+	financeProcedure,
 	createTRPCRouter,
 } from "@starter/core-web/src/trpc/trpc";
 import { z } from "zod";
@@ -16,96 +16,96 @@ import {
 
 export const accountingRouter = createTRPCRouter({
 	// Chart of Accounts
-	listAccounts: protectedProcedureWithOrganization.query(async ({ ctx }) => {
+	listAccounts: financeProcedure.query(async ({ ctx }) => {
 		return accountingFunctions.listAccounts(ctx);
 	}),
 
-	getAccount: protectedProcedureWithOrganization
+	getAccount: financeProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.query(async ({ ctx, input }) => {
 			return accountingFunctions.getAccount(ctx, input);
 		}),
 
-	createAccount: protectedProcedureWithOrganization
+	createAccount: financeProcedure
 		.input(CreateAccountSchema)
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.createAccount(ctx, input);
 		}),
 
-	updateAccount: protectedProcedureWithOrganization
+	updateAccount: financeProcedure
 		.input(z.object({ id: z.string().uuid() }).merge(UpdateAccountSchema))
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.updateAccount(ctx, input);
 		}),
 
 	// Journals
-	listJournals: protectedProcedureWithOrganization.query(async ({ ctx }) => {
+	listJournals: financeProcedure.query(async ({ ctx }) => {
 		return accountingFunctions.listJournals(ctx);
 	}),
 
-	createJournal: protectedProcedureWithOrganization
+	createJournal: financeProcedure
 		.input(CreateJournalSchema)
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.createJournal(ctx, input);
 		}),
 
 	// Journal Entries
-	listJournalEntries: protectedProcedureWithOrganization
+	listJournalEntries: financeProcedure
 		.input(z.object({ journalId: z.string().uuid().nullable().optional() }).optional())
 		.query(async ({ ctx, input }) => {
 			return accountingFunctions.listJournalEntries(ctx, input);
 		}),
 
-	getJournalEntry: protectedProcedureWithOrganization
+	getJournalEntry: financeProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.query(async ({ ctx, input }) => {
 			return accountingFunctions.getJournalEntry(ctx, input);
 		}),
 
-	createJournalEntry: protectedProcedureWithOrganization
+	createJournalEntry: financeProcedure
 		.input(CreateJournalEntrySchema)
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.createJournalEntry(ctx, input);
 		}),
 
-	postJournalEntry: protectedProcedureWithOrganization
+	postJournalEntry: financeProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.postJournalEntry(ctx, input);
 		}),
 
-	addJournalEntryLine: protectedProcedureWithOrganization
+	addJournalEntryLine: financeProcedure
 		.input(CreateJournalEntryLineSchema)
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.addJournalEntryLine(ctx, input);
 		}),
 
-	getJournalEntryLines: protectedProcedureWithOrganization
+	getJournalEntryLines: financeProcedure
 		.input(z.object({ journalEntryId: z.string().uuid() }))
 		.query(async ({ ctx, input }) => {
 			return accountingFunctions.getJournalEntryLines(ctx, input);
 		}),
 
 	// Invoices
-	listInvoices: protectedProcedureWithOrganization
+	listInvoices: financeProcedure
 		.input(z.object({ invoiceType: z.string().nullable().optional() }).optional())
 		.query(async ({ ctx, input }) => {
 			return accountingFunctions.listInvoices(ctx, input);
 		}),
 
-	getInvoice: protectedProcedureWithOrganization
+	getInvoice: financeProcedure
 		.input(z.object({ id: z.string().uuid() }))
 		.query(async ({ ctx, input }) => {
 			return accountingFunctions.getInvoice(ctx, input);
 		}),
 
-	createInvoice: protectedProcedureWithOrganization
+	createInvoice: financeProcedure
 		.input(CreateInvoiceSchema)
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.createInvoice(ctx, input);
 		}),
 
-	updateInvoice: protectedProcedureWithOrganization
+	updateInvoice: financeProcedure
 		.input(z.object({ id: z.string().uuid() }).merge(UpdateInvoiceSchema))
 		.mutation(async ({ ctx, input }) => {
 			return accountingFunctions.updateInvoice(ctx, input);

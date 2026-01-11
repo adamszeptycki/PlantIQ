@@ -1,5 +1,5 @@
 import {
-	protectedProcedureWithOrganization,
+	buyerProcedure,
 	createTRPCRouter,
 } from "@starter/core-web/src/trpc/trpc";
 import { z } from "zod";
@@ -19,13 +19,13 @@ import {
 
 export const purchasingRouter = createTRPCRouter({
 	// Vendors
-	createVendor: protectedProcedureWithOrganization
+	createVendor: buyerProcedure
 		.input(CreateVendorSchema)
 		.mutation(async ({ ctx, input }) => {
 			return purchasingFunctions.createVendor(ctx, input);
 		}),
 
-	updateVendor: protectedProcedureWithOrganization
+	updateVendor: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -35,7 +35,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.updateVendor(ctx, input);
 		}),
 
-	deleteVendor: protectedProcedureWithOrganization
+	deleteVendor: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -45,13 +45,13 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.deleteVendor(ctx, input);
 		}),
 
-	listVendors: protectedProcedureWithOrganization
+	listVendors: buyerProcedure
 		.input(ListVendorsSchema)
 		.query(async ({ ctx, input }) => {
 			return purchasingFunctions.listVendors(ctx, input);
 		}),
 
-	getVendor: protectedProcedureWithOrganization
+	getVendor: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -62,13 +62,13 @@ export const purchasingRouter = createTRPCRouter({
 		}),
 
 	// Product Vendors
-	addProductVendor: protectedProcedureWithOrganization
+	addProductVendor: buyerProcedure
 		.input(CreateProductVendorSchema)
 		.mutation(async ({ ctx, input }) => {
 			return purchasingFunctions.addProductVendor(ctx, input);
 		}),
 
-	updateProductVendor: protectedProcedureWithOrganization
+	updateProductVendor: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -78,7 +78,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.updateProductVendor(ctx, input);
 		}),
 
-	deleteProductVendor: protectedProcedureWithOrganization
+	deleteProductVendor: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -88,7 +88,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.deleteProductVendor(ctx, input);
 		}),
 
-	getProductVendors: protectedProcedureWithOrganization
+	getProductVendors: buyerProcedure
 		.input(
 			z.object({
 				productId: z.string().uuid(),
@@ -98,7 +98,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.getProductVendors(ctx, input);
 		}),
 
-	getVendorProducts: protectedProcedureWithOrganization
+	getVendorProducts: buyerProcedure
 		.input(
 			z.object({
 				vendorId: z.string().uuid(),
@@ -109,13 +109,13 @@ export const purchasingRouter = createTRPCRouter({
 		}),
 
 	// Purchase Orders
-	createPurchaseOrder: protectedProcedureWithOrganization
+	createPurchaseOrder: buyerProcedure
 		.input(CreatePurchaseOrderSchema)
 		.mutation(async ({ ctx, input }) => {
 			return purchasingFunctions.createPurchaseOrder(ctx, input);
 		}),
 
-	updatePurchaseOrder: protectedProcedureWithOrganization
+	updatePurchaseOrder: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -125,7 +125,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.updatePurchaseOrder(ctx, input);
 		}),
 
-	deletePurchaseOrder: protectedProcedureWithOrganization
+	deletePurchaseOrder: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -135,13 +135,13 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.deletePurchaseOrder(ctx, input);
 		}),
 
-	listPurchaseOrders: protectedProcedureWithOrganization
+	listPurchaseOrders: buyerProcedure
 		.input(ListPurchaseOrdersSchema)
 		.query(async ({ ctx, input }) => {
 			return purchasingFunctions.listPurchaseOrders(ctx, input);
 		}),
 
-	getPurchaseOrder: protectedProcedureWithOrganization
+	getPurchaseOrder: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -151,7 +151,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.getPurchaseOrder(ctx, input);
 		}),
 
-	updatePurchaseOrderStatus: protectedProcedureWithOrganization
+	updatePurchaseOrderStatus: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -163,13 +163,13 @@ export const purchasingRouter = createTRPCRouter({
 		}),
 
 	// Purchase Order Line Items
-	addPurchaseOrderLineItem: protectedProcedureWithOrganization
+	addPurchaseOrderLineItem: buyerProcedure
 		.input(CreatePurchaseOrderLineItemSchema)
 		.mutation(async ({ ctx, input }) => {
 			return purchasingFunctions.addPurchaseOrderLineItem(ctx, input);
 		}),
 
-	updatePurchaseOrderLineItem: protectedProcedureWithOrganization
+	updatePurchaseOrderLineItem: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -179,7 +179,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.updatePurchaseOrderLineItem(ctx, input);
 		}),
 
-	deletePurchaseOrderLineItem: protectedProcedureWithOrganization
+	deletePurchaseOrderLineItem: buyerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -189,7 +189,7 @@ export const purchasingRouter = createTRPCRouter({
 			return purchasingFunctions.deletePurchaseOrderLineItem(ctx, input);
 		}),
 
-	getPurchaseOrderLineItems: protectedProcedureWithOrganization
+	getPurchaseOrderLineItems: buyerProcedure
 		.input(
 			z.object({
 				purchaseOrderId: z.string().uuid(),
@@ -200,7 +200,7 @@ export const purchasingRouter = createTRPCRouter({
 		}),
 
 	// Purchase Suggestions
-	getPurchaseSuggestions: protectedProcedureWithOrganization
+	getPurchaseSuggestions: buyerProcedure
 		.query(async ({ ctx }) => {
 			return purchasingFunctions.getPurchaseSuggestions(ctx);
 		}),

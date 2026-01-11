@@ -1,5 +1,5 @@
 import {
-	protectedProcedureWithOrganization,
+	plannerProcedure,
 	createTRPCRouter,
 } from "@starter/core-web/src/trpc/trpc";
 import { z } from "zod";
@@ -7,13 +7,13 @@ import * as productFunctions from "./functions";
 import { CreateProductSchema, ListProductsSchema, UpdateProductSchema } from "./schema";
 
 export const productsRouter = createTRPCRouter({
-	create: protectedProcedureWithOrganization
+	create: plannerProcedure
 		.input(CreateProductSchema)
 		.mutation(async ({ ctx, input }) => {
 			return productFunctions.createProduct(ctx, input);
 		}),
 
-	update: protectedProcedureWithOrganization
+	update: plannerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -23,7 +23,7 @@ export const productsRouter = createTRPCRouter({
 			return productFunctions.updateProduct(ctx, input);
 		}),
 
-	delete: protectedProcedureWithOrganization
+	delete: plannerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -33,13 +33,13 @@ export const productsRouter = createTRPCRouter({
 			return productFunctions.deleteProduct(ctx, input);
 		}),
 
-	list: protectedProcedureWithOrganization
+	list: plannerProcedure
 		.input(ListProductsSchema)
 		.query(async ({ ctx, input }) => {
 			return productFunctions.listProducts(ctx, input);
 		}),
 
-	get: protectedProcedureWithOrganization
+	get: plannerProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),

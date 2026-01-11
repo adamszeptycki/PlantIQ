@@ -1,5 +1,5 @@
 import {
-	protectedProcedureWithOrganization,
+	supervisorProcedure,
 	createTRPCRouter,
 } from "@starter/core-web/src/trpc/trpc";
 import { z } from "zod";
@@ -22,13 +22,13 @@ import {
 
 export const manufacturingRouter = createTRPCRouter({
 	// BOMs
-	createBom: protectedProcedureWithOrganization
+	createBom: supervisorProcedure
 		.input(CreateBomSchema)
 		.mutation(async ({ ctx, input }) => {
 			return manufacturingFunctions.createBom(ctx, input);
 		}),
 
-	updateBom: protectedProcedureWithOrganization
+	updateBom: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -38,7 +38,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.updateBom(ctx, input);
 		}),
 
-	deleteBom: protectedProcedureWithOrganization
+	deleteBom: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -48,13 +48,13 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.deleteBom(ctx, input);
 		}),
 
-	listBoms: protectedProcedureWithOrganization
+	listBoms: supervisorProcedure
 		.input(ListBomsSchema)
 		.query(async ({ ctx, input }) => {
 			return manufacturingFunctions.listBoms(ctx, input);
 		}),
 
-	getBom: protectedProcedureWithOrganization
+	getBom: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -64,7 +64,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.getBom(ctx, input);
 		}),
 
-	getBomLineItems: protectedProcedureWithOrganization
+	getBomLineItems: supervisorProcedure
 		.input(
 			z.object({
 				bomId: z.string().uuid(),
@@ -74,13 +74,13 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.getBomLineItems(ctx, input);
 		}),
 
-	addBomLineItem: protectedProcedureWithOrganization
+	addBomLineItem: supervisorProcedure
 		.input(CreateBomLineItemSchema)
 		.mutation(async ({ ctx, input }) => {
 			return manufacturingFunctions.addBomLineItem(ctx, input);
 		}),
 
-	updateBomLineItem: protectedProcedureWithOrganization
+	updateBomLineItem: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -90,7 +90,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.updateBomLineItem(ctx, input);
 		}),
 
-	deleteBomLineItem: protectedProcedureWithOrganization
+	deleteBomLineItem: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -101,13 +101,13 @@ export const manufacturingRouter = createTRPCRouter({
 		}),
 
 	// Manufacturing Orders
-	createManufacturingOrder: protectedProcedureWithOrganization
+	createManufacturingOrder: supervisorProcedure
 		.input(CreateManufacturingOrderSchema)
 		.mutation(async ({ ctx, input }) => {
 			return manufacturingFunctions.createManufacturingOrder(ctx, input);
 		}),
 
-	updateManufacturingOrder: protectedProcedureWithOrganization
+	updateManufacturingOrder: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -117,7 +117,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.updateManufacturingOrder(ctx, input);
 		}),
 
-	deleteManufacturingOrder: protectedProcedureWithOrganization
+	deleteManufacturingOrder: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -127,13 +127,13 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.deleteManufacturingOrder(ctx, input);
 		}),
 
-	listManufacturingOrders: protectedProcedureWithOrganization
+	listManufacturingOrders: supervisorProcedure
 		.input(ListManufacturingOrdersSchema)
 		.query(async ({ ctx, input }) => {
 			return manufacturingFunctions.listManufacturingOrders(ctx, input);
 		}),
 
-	getManufacturingOrder: protectedProcedureWithOrganization
+	getManufacturingOrder: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -143,7 +143,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.getManufacturingOrder(ctx, input);
 		}),
 
-	updateManufacturingOrderStatus: protectedProcedureWithOrganization
+	updateManufacturingOrderStatus: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -155,13 +155,13 @@ export const manufacturingRouter = createTRPCRouter({
 		}),
 
 	// Work Orders
-	createWorkOrder: protectedProcedureWithOrganization
+	createWorkOrder: supervisorProcedure
 		.input(CreateWorkOrderSchema)
 		.mutation(async ({ ctx, input }) => {
 			return manufacturingFunctions.createWorkOrder(ctx, input);
 		}),
 
-	updateWorkOrder: protectedProcedureWithOrganization
+	updateWorkOrder: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -171,7 +171,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.updateWorkOrder(ctx, input);
 		}),
 
-	deleteWorkOrder: protectedProcedureWithOrganization
+	deleteWorkOrder: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -181,13 +181,13 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.deleteWorkOrder(ctx, input);
 		}),
 
-	listWorkOrders: protectedProcedureWithOrganization
+	listWorkOrders: supervisorProcedure
 		.input(ListWorkOrdersSchema)
 		.query(async ({ ctx, input }) => {
 			return manufacturingFunctions.listWorkOrders(ctx, input);
 		}),
 
-	getWorkOrder: protectedProcedureWithOrganization
+	getWorkOrder: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -197,7 +197,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.getWorkOrder(ctx, input);
 		}),
 
-	updateWorkOrderStatus: protectedProcedureWithOrganization
+	updateWorkOrderStatus: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -209,13 +209,13 @@ export const manufacturingRouter = createTRPCRouter({
 		}),
 
 	// Time Entries
-	createTimeEntry: protectedProcedureWithOrganization
+	createTimeEntry: supervisorProcedure
 		.input(CreateTimeEntrySchema)
 		.mutation(async ({ ctx, input }) => {
 			return manufacturingFunctions.createTimeEntry(ctx, input);
 		}),
 
-	updateTimeEntry: protectedProcedureWithOrganization
+	updateTimeEntry: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -225,7 +225,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.updateTimeEntry(ctx, input);
 		}),
 
-	deleteTimeEntry: protectedProcedureWithOrganization
+	deleteTimeEntry: supervisorProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -235,7 +235,7 @@ export const manufacturingRouter = createTRPCRouter({
 			return manufacturingFunctions.deleteTimeEntry(ctx, input);
 		}),
 
-	getWorkOrderTimeEntries: protectedProcedureWithOrganization
+	getWorkOrderTimeEntries: supervisorProcedure
 		.input(
 			z.object({
 				workOrderId: z.string().uuid(),

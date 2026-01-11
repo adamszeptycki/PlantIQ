@@ -1,5 +1,5 @@
 import {
-	protectedProcedureWithOrganization,
+	salesProcedure,
 	createTRPCRouter,
 } from "@starter/core-web/src/trpc/trpc";
 import { z } from "zod";
@@ -25,13 +25,13 @@ import {
 
 export const salesRouter = createTRPCRouter({
 	// Customers
-	createCustomer: protectedProcedureWithOrganization
+	createCustomer: salesProcedure
 		.input(CreateCustomerSchema)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.createCustomer(ctx, input);
 		}),
 
-	updateCustomer: protectedProcedureWithOrganization
+	updateCustomer: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -41,7 +41,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateCustomer(ctx, input);
 		}),
 
-	deleteCustomer: protectedProcedureWithOrganization
+	deleteCustomer: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -51,13 +51,13 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.deleteCustomer(ctx, input);
 		}),
 
-	listCustomers: protectedProcedureWithOrganization
+	listCustomers: salesProcedure
 		.input(ListCustomersSchema)
 		.query(async ({ ctx, input }) => {
 			return salesFunctions.listCustomers(ctx, input);
 		}),
 
-	getCustomer: protectedProcedureWithOrganization
+	getCustomer: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -68,13 +68,13 @@ export const salesRouter = createTRPCRouter({
 		}),
 
 	// Leads
-	createLead: protectedProcedureWithOrganization
+	createLead: salesProcedure
 		.input(CreateLeadSchema)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.createLead(ctx, input);
 		}),
 
-	updateLead: protectedProcedureWithOrganization
+	updateLead: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -84,7 +84,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateLead(ctx, input);
 		}),
 
-	deleteLead: protectedProcedureWithOrganization
+	deleteLead: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -94,13 +94,13 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.deleteLead(ctx, input);
 		}),
 
-	listLeads: protectedProcedureWithOrganization
+	listLeads: salesProcedure
 		.input(ListLeadsSchema)
 		.query(async ({ ctx, input }) => {
 			return salesFunctions.listLeads(ctx, input);
 		}),
 
-	getLead: protectedProcedureWithOrganization
+	getLead: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -110,7 +110,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.getLead(ctx, input);
 		}),
 
-	updateLeadStatus: protectedProcedureWithOrganization
+	updateLeadStatus: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -121,7 +121,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateLeadStatus(ctx, input);
 		}),
 
-	assignLead: protectedProcedureWithOrganization
+	assignLead: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -132,7 +132,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.assignLead(ctx, input);
 		}),
 
-	convertLeadToCustomer: protectedProcedureWithOrganization
+	convertLeadToCustomer: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -143,13 +143,13 @@ export const salesRouter = createTRPCRouter({
 		}),
 
 	// Quotes
-	createQuote: protectedProcedureWithOrganization
+	createQuote: salesProcedure
 		.input(CreateQuoteSchema)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.createQuote(ctx, input);
 		}),
 
-	updateQuote: protectedProcedureWithOrganization
+	updateQuote: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -159,7 +159,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateQuote(ctx, input);
 		}),
 
-	deleteQuote: protectedProcedureWithOrganization
+	deleteQuote: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -169,13 +169,13 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.deleteQuote(ctx, input);
 		}),
 
-	listQuotes: protectedProcedureWithOrganization
+	listQuotes: salesProcedure
 		.input(ListQuotesSchema)
 		.query(async ({ ctx, input }) => {
 			return salesFunctions.listQuotes(ctx, input);
 		}),
 
-	getQuote: protectedProcedureWithOrganization
+	getQuote: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -185,7 +185,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.getQuote(ctx, input);
 		}),
 
-	updateQuoteStatus: protectedProcedureWithOrganization
+	updateQuoteStatus: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -196,7 +196,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateQuoteStatus(ctx, input);
 		}),
 
-	getQuoteLineItems: protectedProcedureWithOrganization
+	getQuoteLineItems: salesProcedure
 		.input(
 			z.object({
 				quoteId: z.string().uuid(),
@@ -206,13 +206,13 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.getQuoteLineItems(ctx, input);
 		}),
 
-	addQuoteLineItem: protectedProcedureWithOrganization
+	addQuoteLineItem: salesProcedure
 		.input(CreateQuoteLineItemSchema)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.addQuoteLineItem(ctx, input);
 		}),
 
-	updateQuoteLineItem: protectedProcedureWithOrganization
+	updateQuoteLineItem: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -222,7 +222,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateQuoteLineItem(ctx, input);
 		}),
 
-	deleteQuoteLineItem: protectedProcedureWithOrganization
+	deleteQuoteLineItem: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -233,13 +233,13 @@ export const salesRouter = createTRPCRouter({
 		}),
 
 	// Sales Orders
-	createSalesOrder: protectedProcedureWithOrganization
+	createSalesOrder: salesProcedure
 		.input(CreateSalesOrderSchema)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.createSalesOrder(ctx, input);
 		}),
 
-	updateSalesOrder: protectedProcedureWithOrganization
+	updateSalesOrder: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -249,7 +249,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateSalesOrder(ctx, input);
 		}),
 
-	deleteSalesOrder: protectedProcedureWithOrganization
+	deleteSalesOrder: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -259,13 +259,13 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.deleteSalesOrder(ctx, input);
 		}),
 
-	listSalesOrders: protectedProcedureWithOrganization
+	listSalesOrders: salesProcedure
 		.input(ListSalesOrdersSchema)
 		.query(async ({ ctx, input }) => {
 			return salesFunctions.listSalesOrders(ctx, input);
 		}),
 
-	getSalesOrder: protectedProcedureWithOrganization
+	getSalesOrder: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -275,7 +275,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.getSalesOrder(ctx, input);
 		}),
 
-	updateSalesOrderStatus: protectedProcedureWithOrganization
+	updateSalesOrderStatus: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -294,7 +294,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateSalesOrderStatus(ctx, input);
 		}),
 
-	getSalesOrderLineItems: protectedProcedureWithOrganization
+	getSalesOrderLineItems: salesProcedure
 		.input(
 			z.object({
 				salesOrderId: z.string().uuid(),
@@ -304,13 +304,13 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.getSalesOrderLineItems(ctx, input);
 		}),
 
-	addSalesOrderLineItem: protectedProcedureWithOrganization
+	addSalesOrderLineItem: salesProcedure
 		.input(CreateSalesOrderLineItemSchema)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.addSalesOrderLineItem(ctx, input);
 		}),
 
-	updateSalesOrderLineItem: protectedProcedureWithOrganization
+	updateSalesOrderLineItem: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
@@ -320,7 +320,7 @@ export const salesRouter = createTRPCRouter({
 			return salesFunctions.updateSalesOrderLineItem(ctx, input);
 		}),
 
-	deleteSalesOrderLineItem: protectedProcedureWithOrganization
+	deleteSalesOrderLineItem: salesProcedure
 		.input(
 			z.object({
 				id: z.string().uuid(),
