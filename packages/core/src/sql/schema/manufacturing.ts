@@ -1,9 +1,10 @@
 import { defaultFields } from "@starter/core/src/sql/utils";
-import { boolean, numeric, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { boolean, date, numeric, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { bomTypeEnum } from "./enums";
+import { bomTypeEnum, moStatusEnum } from "./enums";
 import { organizations } from "./auth";
 import { products } from "./products";
+import { users } from "./auth";
 
 // Bills of Materials (BOM)
 export const boms = pgTable("boms", {
@@ -50,3 +51,32 @@ export const InsertBomLineItemSchema = createInsertSchema(bomLineItems).omit({
 });
 export type BomLineItem = typeof bomLineItems.$inferSelect;
 export type InsertBomLineItem = typeof bomLineItems.$inferInsert;
+
+// Manufacturing Orders (MO)
+export const manufacturingOrders = pgTable("manufacturing_orders", {
+	...defaultFields,
+	organizationId: uuid("organization_id")
+		.notNull()
+		.references(() => organizations.id, { onDelete: "cascade" }),
+	productId: uuid("product_id")
+		.notNull()
+		.references(() => products.id, { onDelete: "cascade" }),
+	bomId: uuid("bom_id").references(() => boms.id, { onDelete: "set null" }),
+	moNumber: text("mo_number").notNull(),
+	status: moStatusEnum("status").default("draft").notNull(),
+	quantityToProduce: numeric("quantity_to_produce", { precision: 10, scale: 2 }).notNull(),
+	quantityProduced: numeric("quantity_produced", { precision: 10, scale: 2 }).default("0").notNull(),
+	scheduledStartDate: date("scheduled_start_date"),
+	scheduledEndDate: date("scheduled_end_date"),
+	actualStartDate: date("actual_start_date"),
+	actualEndDate: date("actual_end_date"),
+	responsiblePerson: uuid("responsible_person").references(() => users.id, { onDelete: "set null" }),
+	notes: text("notes"),
+});
+
+export const ManufacturingOrderSchema = createSelectSchema(manufacturingOrders);
+export const InsertManufacturingOrderSchema = createInsertSchema(manufacturingOrders).omit({
+	id: true,
+});
+export type ManufacturingOrder = typeof manufacturingOrders.$inferSelect;
+export type InsertManufacturingOrder = typeof manufacturingOrders.$inferInsert;

@@ -50,6 +50,13 @@
       "when": 1768126210043,
       "tag": "0006_silly_beyonder",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768126471227,
+      "tag": "0007_lush_maestro",
+      "breakpoints": true
     }
   ]
 }
