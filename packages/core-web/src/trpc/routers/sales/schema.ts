@@ -53,3 +53,43 @@ export type ListCustomersArgs = z.infer<typeof ListCustomersSchema>;
 export type CreateLeadArgs = z.infer<typeof CreateLeadSchema>;
 export type UpdateLeadArgs = z.infer<typeof UpdateLeadSchema>;
 export type ListLeadsArgs = z.infer<typeof ListLeadsSchema>;
+
+// Quotes
+export const CreateQuoteSchema = z.object({
+	customerId: z.string().uuid(),
+	quoteNumber: z.string().min(1, "Quote number is required"),
+	status: z
+		.enum(["draft", "sent", "accepted", "rejected", "expired"])
+		.default("draft"),
+	validUntil: z.string().nullable().optional(),
+	terms: z.string().nullable().optional(),
+	notes: z.string().nullable().optional(),
+});
+
+export const UpdateQuoteSchema = CreateQuoteSchema.partial();
+
+export const ListQuotesSchema = z.object({
+	customerId: z.string().uuid().nullable().optional(),
+	status: z.string().nullable().optional(),
+	search: z.string().nullable().optional(),
+	limit: z.number().int().min(1).max(100).default(50),
+	offset: z.number().int().min(0).default(0),
+});
+
+export const CreateQuoteLineItemSchema = z.object({
+	quoteId: z.string().uuid(),
+	productId: z.string().uuid(),
+	quantity: z.string().min(1, "Quantity is required"),
+	unitPrice: z.string().min(1, "Unit price is required"),
+	discount: z.string().default("0"),
+	lineTotal: z.string().min(1, "Line total is required"),
+	notes: z.string().nullable().optional(),
+});
+
+export const UpdateQuoteLineItemSchema = CreateQuoteLineItemSchema.partial();
+
+export type CreateQuoteArgs = z.infer<typeof CreateQuoteSchema>;
+export type UpdateQuoteArgs = z.infer<typeof UpdateQuoteSchema>;
+export type ListQuotesArgs = z.infer<typeof ListQuotesSchema>;
+export type CreateQuoteLineItemArgs = z.infer<typeof CreateQuoteLineItemSchema>;
+export type UpdateQuoteLineItemArgs = z.infer<typeof UpdateQuoteLineItemSchema>;

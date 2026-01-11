@@ -1,5 +1,14 @@
 import { getDb } from "@starter/core/src/sql";
-import { customers, leads, type Customer, type Lead } from "@starter/core/src/sql/schema";
+import {
+	customers,
+	leads,
+	quotes,
+	quoteLineItems,
+	type Customer,
+	type Lead,
+	type Quote,
+	type QuoteLineItem,
+} from "@starter/core/src/sql/schema";
 import { and, desc, eq, ilike, or } from "drizzle-orm";
 
 // Customers
@@ -143,4 +152,87 @@ export const countLeadsByStatus = async (
 		.from(leads)
 		.where(and(eq(leads.organizationId, organizationId), eq(leads.status, status as any)));
 	return Number(result?.count) || 0;
+};
+
+// Quotes
+type ListQuotesArgs = {
+	organizationId: string;
+	customerId?: string | null;
+	status?: string | null;
+	search?: string | null;
+	limit?: number;
+	offset?: number;
+};
+
+export const listQuotes = async ({
+	organizationId,
+	customerId,
+	status,
+	search,
+	limit = 50,
+	offset = 0,
+}: ListQuotesArgs): Promise<Quote[]> => {
+	const db = getDb();
+
+	const conditions = [eq(quotes.organizationId, organizationId)];
+
+	if (customerId) {
+		conditions.push(eq(quotes.customerId, customerId));
+	}
+
+	if (status) {
+		conditions.push(eq(quotes.status, status as any));
+	}
+
+	if (search && search.length > 0) {
+		conditions.push(ilike(quotes.quoteNumber, `%${search}%`));
+	}
+
+	const results = await db
+		.select()
+		.from(quotes)
+		.where(and(...conditions))
+		.orderBy(desc(quotes.createdAt))
+		.limit(limit)
+		.offset(offset);
+
+	return results;
+};
+
+export const getQuoteById = async (
+	id: string,
+	organizationId: string,
+): Promise<Quote | null> => {
+	const db = getDb();
+	const [quote] = await db
+		.select()
+		.from(quotes)
+		.where(and(eq(quotes.id, id), eq(quotes.organizationId, organizationId)));
+	return quote || null;
+};
+
+export const countQuotes = async (organizationId: string): Promise<number> => {
+	const db = getDb();
+	const [result] = await db
+		.select({ count: quotes.id })
+		.from(quotes)
+		.where(eq(quotes.organizationId, organizationId));
+	return Number(result?.count) || 0;
+};
+
+export const getQuoteLineItems = async (
+	quoteId: string,
+	organizationId: string,
+): Promise<QuoteLineItem[]> => {
+	const db = getDb();
+	const results = await db
+		.select()
+		.from(quoteLineItems)
+		.where(
+			and(
+				eq(quoteLineItems.quoteId, quoteId),
+				eq(quoteLineItems.organizationId, organizationId),
+			),
+		);
+	return results;
 };

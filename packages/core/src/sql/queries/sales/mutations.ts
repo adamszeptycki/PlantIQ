@@ -2,12 +2,18 @@ import { getDb } from "@starter/core/src/sql";
 import {
 	customers,
 	leads,
+	quotes,
+	quoteLineItems,
 	type Customer,
 	type InsertCustomer,
 	type InsertLead,
+	type InsertQuote,
+	type InsertQuoteLineItem,
 	type Lead,
+	type Quote,
+	type QuoteLineItem,
 } from "@starter/core/src/sql/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 // Customers
 export const createCustomer = async (data: InsertCustomer): Promise<Customer> => {
@@ -129,4 +135,135 @@ export const convertLeadToCustomer = async (
 	await updateLeadStatus(leadId, organizationId, "won");
 
 	return customer;
+};
+
+// Quotes
+export const createQuote = async (data: InsertQuote): Promise<Quote> => {
+	const db = getDb();
+	const [newQuote] = await db.insert(quotes).values(data).returning();
+	if (!newQuote) {
+		throw new Error("Failed to create quote");
+	}
+	return newQuote;
+};
+
+export const updateQuote = async (
+	id: string,
+	organizationId: string,
+	data: Partial<InsertQuote>,
+): Promise<Quote | null> => {
+	const db = getDb();
+	const [updatedQuote] = await db
+		.update(quotes)
+		.set({ ...data, updatedAt: new Date() })
+		.where(and(eq(quotes.id, id), eq(quotes.organizationId, organizationId)))
+		.returning();
+	return updatedQuote || null;
+};
+
+export const deleteQuote = async (
+	id: string,
+	organizationId: string,
+): Promise<Quote | null> => {
+	const db = getDb();
+	const [deletedQuote] = await db
+		.delete(quotes)
+		.where(and(eq(quotes.id, id), eq(quotes.organizationId, organizationId)))
+		.returning();
+	return deletedQuote || null;
+};
+
+export const updateQuoteStatus = async (
+	id: string,
+	organizationId: string,
+	status: string,
+): Promise<Quote | null> => {
+	return updateQuote(id, organizationId, { status: status as any });
+};
+
+// Quote Line Items
+export const addQuoteLineItem = async (
+	data: InsertQuoteLineItem,
+): Promise<QuoteLineItem> => {
+	const db = getDb();
+	const [newLineItem] = await db.insert(quoteLineItems).values(data).returning();
+	if (!newLineItem) {
+		throw new Error("Failed to add quote line item");
+	}
+
+	// Recalculate quote totals
+	await recalculateQuoteTotals(data.quoteId, data.organizationId);
+
+	return newLineItem;
+};
+
+export const updateQuoteLineItem = async (
+	id: string,
+	organizationId: string,
+	data: Partial<InsertQuoteLineItem>,
+): Promise<QuoteLineItem | null> => {
+	const db = getDb();
+	const [updatedLineItem] = await db
+		.update(quoteLineItems)
+		.set({ ...data, updatedAt: new Date() })
+		.where(and(eq(quoteLineItems.id, id), eq(quoteLineItems.organizationId, organizationId)))
+		.returning();
+
+	// Recalculate quote totals if line item was updated
+	if (updatedLineItem) {
+		await recalculateQuoteTotals(updatedLineItem.quoteId, organizationId);
+	}
+
+	return updatedLineItem || null;
+};
+
+export const deleteQuoteLineItem = async (
+	id: string,
+	organizationId: string,
+): Promise<QuoteLineItem | null> => {
+	const db = getDb();
+	const [deletedLineItem] = await db
+		.delete(quoteLineItems)
+		.where(and(eq(quoteLineItems.id, id), eq(quoteLineItems.organizationId, organizationId)))
+		.returning();
+
+	// Recalculate quote totals if line item was deleted
+	if (deletedLineItem) {
+		await recalculateQuoteTotals(deletedLineItem.quoteId, organizationId);
+	}
+
+	return deletedLineItem || null;
+};
+
+// Helper function to recalculate quote totals
+const recalculateQuoteTotals = async (
+	quoteId: string,
+	organizationId: string,
+): Promise<void> => {
+	const db = getDb();
+
+	// Sum all line totals
+	const [result] = await db
+		.select({
+			subtotal: sql<string>`COALESCE(SUM(${quoteLineItems.lineTotal}), 0)`,
+		})
+		.from(quoteLineItems)
+		.where(
+			and(
+				eq(quoteLineItems.quoteId, quoteId),
+				eq(quoteLineItems.organizationId, organizationId),
+			),
+		);
+
+	const subtotal = result?.subtotal || "0";
+
+	// Update quote totals (tax calculation can be added later)
+	await db
+		.update(quotes)
+		.set({
+			subtotal,
+			total: subtotal, // For now, total = subtotal (tax can be added later)
+			updatedAt: new Date(),
+		})
+		.where(and(eq(quotes.id, quoteId), eq(quotes.organizationId, organizationId)));
 };

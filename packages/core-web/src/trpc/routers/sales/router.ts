@@ -7,10 +7,15 @@ import * as salesFunctions from "./functions";
 import {
 	CreateCustomerSchema,
 	CreateLeadSchema,
+	CreateQuoteLineItemSchema,
+	CreateQuoteSchema,
 	ListCustomersSchema,
 	ListLeadsSchema,
+	ListQuotesSchema,
 	UpdateCustomerSchema,
 	UpdateLeadSchema,
+	UpdateQuoteLineItemSchema,
+	UpdateQuoteSchema,
 } from "./schema";
 
 export const salesRouter = createTRPCRouter({
@@ -130,5 +135,95 @@ export const salesRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.convertLeadToCustomer(ctx, input);
+		}),
+
+	// Quotes
+	createQuote: protectedProcedureWithOrganization
+		.input(CreateQuoteSchema)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.createQuote(ctx, input);
+		}),
+
+	updateQuote: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}).merge(UpdateQuoteSchema),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.updateQuote(ctx, input);
+		}),
+
+	deleteQuote: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.deleteQuote(ctx, input);
+		}),
+
+	listQuotes: protectedProcedureWithOrganization
+		.input(ListQuotesSchema)
+		.query(async ({ ctx, input }) => {
+			return salesFunctions.listQuotes(ctx, input);
+		}),
+
+	getQuote: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return salesFunctions.getQuote(ctx, input);
+		}),
+
+	updateQuoteStatus: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+				status: z.enum(["draft", "sent", "accepted", "rejected", "expired"]),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.updateQuoteStatus(ctx, input);
+		}),
+
+	getQuoteLineItems: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				quoteId: z.string().uuid(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return salesFunctions.getQuoteLineItems(ctx, input);
+		}),
+
+	addQuoteLineItem: protectedProcedureWithOrganization
+		.input(CreateQuoteLineItemSchema)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.addQuoteLineItem(ctx, input);
+		}),
+
+	updateQuoteLineItem: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}).merge(UpdateQuoteLineItemSchema),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.updateQuoteLineItem(ctx, input);
+		}),
+
+	deleteQuoteLineItem: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.deleteQuoteLineItem(ctx, input);
 		}),
 });
