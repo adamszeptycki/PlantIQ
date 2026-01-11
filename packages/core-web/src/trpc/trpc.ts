@@ -3,6 +3,8 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import type { Context } from "./context";
+import { checkUserHasErpRole } from "@starter/core/src/sql/queries/erp-roles/queries";
+import type { ErpRole } from "@starter/core/src/sql/schema/erp-roles";
 
 const t = initTRPC.context<Context>().create({
 	transformer: superjson,
@@ -280,8 +282,92 @@ const enforceUserIsSuperadmin = t.middleware(async ({ ctx, next }) => {
 
 /**
  * Protected procedure with superadmin access
- * 
+ *
  * Use this for procedures that require the user to be a superadmin (global admin role).
  * It guarantees `ctx.session.user` and `ctx.organization` are not null, and user has global admin role.
  */
 export const protectedProcedureWithSuperadmin = t.procedure.use(enforceUserIsSuperadmin);
+
+
+/** Helper function to create ERP role middleware */
+function createErpRoleMiddleware(role: ErpRole) {
+	return t.middleware(async ({ ctx, next }) => {
+		if (!ctx.session?.user) {
+			throw new TRPCError({ code: "UNAUTHORIZED" });
+		}
+
+		const activeOrganizationId = ctx.session.session.activeOrganizationId;
+
+		if (!activeOrganizationId) {
+			throw new TRPCError({
+				code: "UNAUTHORIZED",
+				message: "User does not have an active organization",
+			});
+		}
+
+		// Get the organization details using Better Auth API
+		const organizationResult = await auth.api.getFullOrganization({
+			headers: ctx.headers,
+			query: {
+				organizationId: activeOrganizationId,
+			},
+		});
+
+		if (!organizationResult) {
+			throw new TRPCError({
+				code: "NOT_FOUND",
+				message: "Organization not found",
+			});
+		}
+
+		// Check if user has the required ERP role (or admin role which has all permissions)
+		const hasRole = await checkUserHasErpRole(
+			ctx.session.user.id,
+			activeOrganizationId,
+			role,
+		);
+		const hasAdminRole = await checkUserHasErpRole(
+			ctx.session.user.id,
+			activeOrganizationId,
+			"admin",
+		);
+
+		if (!hasRole && !hasAdminRole) {
+			throw new TRPCError({
+				code: "FORBIDDEN",
+				message: `User must have ${role} or admin role to access this resource`,
+			});
+		}
+
+		return next({
+			ctx: {
+				...ctx,
+				session: { ...ctx.session, user: ctx.session.user },
+				organization: organizationResult,
+			},
+		});
+	});
+}
+
+// ERP Role Middlewares
+const enforceSalesRole = createErpRoleMiddleware("sales");
+const enforcePlannerRole = createErpRoleMiddleware("planner");
+const enforceBuyerRole = createErpRoleMiddleware("buyer");
+const enforceWorkerRole = createErpRoleMiddleware("worker");
+const enforceSupervisorRole = createErpRoleMiddleware("supervisor");
+const enforceFinanceRole = createErpRoleMiddleware("finance");
+const enforceAdminRole = createErpRoleMiddleware("admin");
+
+/**
+ * ERP Role Protected Procedures
+ *
+ * These procedures enforce specific ERP roles for access control.
+ * Admin role has access to all procedures.
+ */
+export const salesProcedure = t.procedure.use(enforceSalesRole);
+export const plannerProcedure = t.procedure.use(enforcePlannerRole);
+export const buyerProcedure = t.procedure.use(enforceBuyerRole);
+export const workerProcedure = t.procedure.use(enforceWorkerRole);
+export const supervisorProcedure = t.procedure.use(enforceSupervisorRole);
+export const financeProcedure = t.procedure.use(enforceFinanceRole);
+export const adminProcedure = t.procedure.use(enforceAdminRole);
