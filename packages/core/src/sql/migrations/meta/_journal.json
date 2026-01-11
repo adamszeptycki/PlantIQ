@@ -29,6 +29,13 @@
       "when": 1768081552908,
       "tag": "0003_aspiring_nomad",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1768120728618,
+      "tag": "0004_thankful_darkhawk",
+      "breakpoints": true
     }
   ]
 }
