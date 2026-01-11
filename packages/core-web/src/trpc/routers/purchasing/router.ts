@@ -198,4 +198,10 @@ export const purchasingRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			return purchasingFunctions.getPurchaseOrderLineItems(ctx, input);
 		}),
+
+	// Purchase Suggestions
+	getPurchaseSuggestions: protectedProcedureWithOrganization
+		.query(async ({ ctx }) => {
+			return purchasingFunctions.getPurchaseSuggestions(ctx);
+		}),
 });

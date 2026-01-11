@@ -24,6 +24,7 @@ import {
 	getPurchaseOrderById as getPurchaseOrderByIdQuery,
 	countPurchaseOrders as countPurchaseOrdersQuery,
 	getPurchaseOrderLineItems as getPurchaseOrderLineItemsQuery,
+	getPurchaseSuggestions as getPurchaseSuggestionsQuery,
 } from "@starter/core/src/sql/queries/purchasing/queries";
 import { TRPCError } from "@trpc/server";
 import type {
@@ -454,4 +455,19 @@ export async function getPurchaseOrderLineItems(ctx: Context, input: { purchaseO
 	const lineItems = await getPurchaseOrderLineItemsQuery(input.purchaseOrderId, organizationId);
 
 	return lineItems;
+}
+
+// Purchase Suggestions
+export async function getPurchaseSuggestions(ctx: Context) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const suggestions = await getPurchaseSuggestionsQuery(organizationId);
+
+	return suggestions;
 }
