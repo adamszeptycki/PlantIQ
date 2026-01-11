@@ -71,6 +71,20 @@
       "when": 1768157736148,
       "tag": "0009_hesitant_wallow",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1768158226370,
+      "tag": "0010_unknown_gateway",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1768158276900,
+      "tag": "0011_fine_pyro",
+      "breakpoints": true
     }
   ]
 }
