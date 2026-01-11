@@ -7,9 +7,12 @@ import * as manufacturingFunctions from "./functions";
 import {
 	CreateBomLineItemSchema,
 	CreateBomSchema,
+	CreateManufacturingOrderSchema,
 	ListBomsSchema,
+	ListManufacturingOrdersSchema,
 	UpdateBomLineItemSchema,
 	UpdateBomSchema,
+	UpdateManufacturingOrderSchema,
 } from "./schema";
 
 export const manufacturingRouter = createTRPCRouter({
@@ -90,5 +93,59 @@ export const manufacturingRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			return manufacturingFunctions.deleteBomLineItem(ctx, input);
+		}),
+
+	// Manufacturing Orders
+	createManufacturingOrder: protectedProcedureWithOrganization
+		.input(CreateManufacturingOrderSchema)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.createManufacturingOrder(ctx, input);
+		}),
+
+	updateManufacturingOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}).merge(UpdateManufacturingOrderSchema),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.updateManufacturingOrder(ctx, input);
+		}),
+
+	deleteManufacturingOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.deleteManufacturingOrder(ctx, input);
+		}),
+
+	listManufacturingOrders: protectedProcedureWithOrganization
+		.input(ListManufacturingOrdersSchema)
+		.query(async ({ ctx, input }) => {
+			return manufacturingFunctions.listManufacturingOrders(ctx, input);
+		}),
+
+	getManufacturingOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return manufacturingFunctions.getManufacturingOrder(ctx, input);
+		}),
+
+	updateManufacturingOrderStatus: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+				status: z.enum(["draft", "confirmed", "in_progress", "done", "cancelled"]),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.updateManufacturingOrderStatus(ctx, input);
 		}),
 });

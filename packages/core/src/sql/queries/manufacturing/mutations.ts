@@ -2,10 +2,13 @@ import { getDb } from "@starter/core/src/sql";
 import {
 	boms,
 	bomLineItems,
+	manufacturingOrders,
 	type Bom,
 	type BomLineItem,
 	type InsertBom,
 	type InsertBomLineItem,
+	type InsertManufacturingOrder,
+	type ManufacturingOrder,
 } from "@starter/core/src/sql/schema";
 import { and, eq } from "drizzle-orm";
 
@@ -91,4 +94,60 @@ export const deleteBomLineItem = async (
 		)
 		.returning();
 	return deletedLineItem || null;
+};
+
+// Manufacturing Orders
+export const createManufacturingOrder = async (
+	data: InsertManufacturingOrder,
+): Promise<ManufacturingOrder> => {
+	const db = getDb();
+	const [newMO] = await db.insert(manufacturingOrders).values(data).returning();
+	if (!newMO) {
+		throw new Error("Failed to create manufacturing order");
+	}
+	return newMO;
+};
+
+export const updateManufacturingOrder = async (
+	id: string,
+	organizationId: string,
+	data: Partial<InsertManufacturingOrder>,
+): Promise<ManufacturingOrder | null> => {
+	const db = getDb();
+	const [updatedMO] = await db
+		.update(manufacturingOrders)
+		.set({ ...data, updatedAt: new Date() })
+		.where(
+			and(
+				eq(manufacturingOrders.id, id),
+				eq(manufacturingOrders.organizationId, organizationId),
+			),
+		)
+		.returning();
+	return updatedMO || null;
+};
+
+export const deleteManufacturingOrder = async (
+	id: string,
+	organizationId: string,
+): Promise<ManufacturingOrder | null> => {
+	const db = getDb();
+	const [deletedMO] = await db
+		.delete(manufacturingOrders)
+		.where(
+			and(
+				eq(manufacturingOrders.id, id),
+				eq(manufacturingOrders.organizationId, organizationId),
+			),
+		)
+		.returning();
+	return deletedMO || null;
+};
+
+export const updateManufacturingOrderStatus = async (
+	id: string,
+	organizationId: string,
+	status: string,
+): Promise<ManufacturingOrder | null> => {
+	return updateManufacturingOrder(id, organizationId, { status: status as any });
 };

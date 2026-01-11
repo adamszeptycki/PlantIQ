@@ -32,3 +32,31 @@ export type UpdateBomArgs = z.infer<typeof UpdateBomSchema>;
 export type ListBomsArgs = z.infer<typeof ListBomsSchema>;
 export type CreateBomLineItemArgs = z.infer<typeof CreateBomLineItemSchema>;
 export type UpdateBomLineItemArgs = z.infer<typeof UpdateBomLineItemSchema>;
+
+// Manufacturing Orders
+export const CreateManufacturingOrderSchema = z.object({
+	productId: z.string().uuid(),
+	bomId: z.string().uuid().nullable().optional(),
+	moNumber: z.string().min(1, "MO number is required"),
+	status: z.enum(["draft", "confirmed", "in_progress", "done", "cancelled"]).default("draft"),
+	quantityToProduce: z.string().min(1, "Quantity is required"),
+	scheduledStartDate: z.string().nullable().optional(),
+	scheduledEndDate: z.string().nullable().optional(),
+	actualStartDate: z.string().nullable().optional(),
+	actualEndDate: z.string().nullable().optional(),
+	responsiblePerson: z.string().uuid().nullable().optional(),
+	notes: z.string().nullable().optional(),
+});
+
+export const UpdateManufacturingOrderSchema = CreateManufacturingOrderSchema.partial();
+
+export const ListManufacturingOrdersSchema = z.object({
+	productId: z.string().uuid().nullable().optional(),
+	status: z.string().nullable().optional(),
+	limit: z.number().int().min(1).max(100).default(50),
+	offset: z.number().int().min(0).default(0),
+});
+
+export type CreateManufacturingOrderArgs = z.infer<typeof CreateManufacturingOrderSchema>;
+export type UpdateManufacturingOrderArgs = z.infer<typeof UpdateManufacturingOrderSchema>;
+export type ListManufacturingOrdersArgs = z.infer<typeof ListManufacturingOrdersSchema>;

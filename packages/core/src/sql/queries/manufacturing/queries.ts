@@ -2,8 +2,10 @@ import { getDb } from "@starter/core/src/sql";
 import {
 	boms,
 	bomLineItems,
+	manufacturingOrders,
 	type Bom,
 	type BomLineItem,
+	type ManufacturingOrder,
 } from "@starter/core/src/sql/schema";
 import { and, desc, eq } from "drizzle-orm";
 
@@ -76,4 +78,69 @@ export const getBomLineItems = async (
 			),
 		);
 	return results;
+};
+
+// Manufacturing Orders
+type ListManufacturingOrdersArgs = {
+	organizationId: string;
+	productId?: string | null;
+	status?: string | null;
+	limit?: number;
+	offset?: number;
+};
+
+export const listManufacturingOrders = async ({
+	organizationId,
+	productId,
+	status,
+	limit = 50,
+	offset = 0,
+}: ListManufacturingOrdersArgs): Promise<ManufacturingOrder[]> => {
+	const db = getDb();
+
+	const conditions = [eq(manufacturingOrders.organizationId, organizationId)];
+
+	if (productId) {
+		conditions.push(eq(manufacturingOrders.productId, productId));
+	}
+
+	if (status) {
+		conditions.push(eq(manufacturingOrders.status, status as any));
+	}
+
+	const results = await db
+		.select()
+		.from(manufacturingOrders)
+		.where(and(...conditions))
+		.orderBy(desc(manufacturingOrders.createdAt))
+		.limit(limit)
+		.offset(offset);
+
+	return results;
+};
+
+export const getManufacturingOrderById = async (
+	id: string,
+	organizationId: string,
+): Promise<ManufacturingOrder | null> => {
+	const db = getDb();
+	const [mo] = await db
+		.select()
+		.from(manufacturingOrders)
+		.where(
+			and(
+				eq(manufacturingOrders.id, id),
+				eq(manufacturingOrders.organizationId, organizationId),
+			),
+		);
+	return mo || null;
+};
+
+export const countManufacturingOrders = async (organizationId: string): Promise<number> => {
+	const db = getDb();
+	const [result] = await db
+		.select({ count: manufacturingOrders.id })
+		.from(manufacturingOrders)
+		.where(eq(manufacturingOrders.organizationId, organizationId));
+	return Number(result?.count) || 0;
 };
