@@ -17,6 +17,7 @@ export async function createProduct(
 	input: CreateProductArgs,
 ) {
 	const organizationId = ctx.session?.session?.activeOrganizationId;
+	const userId = ctx.session?.user?.id;
 	if (!organizationId) {
 		throw new TRPCError({
 			code: "BAD_REQUEST",
@@ -24,10 +25,13 @@ export async function createProduct(
 		});
 	}
 
-	const product = await createProductMutation({
-		...input,
-		organizationId,
-	});
+	const product = await createProductMutation(
+		{
+			...input,
+			organizationId,
+		},
+		userId,
+	);
 
 	return product;
 }
@@ -37,6 +41,7 @@ export async function updateProduct(
 	input: UpdateProductArgs & { id: string },
 ) {
 	const organizationId = ctx.session?.session?.activeOrganizationId;
+	const userId = ctx.session?.user?.id;
 	if (!organizationId) {
 		throw new TRPCError({
 			code: "BAD_REQUEST",
@@ -45,7 +50,7 @@ export async function updateProduct(
 	}
 
 	const { id, ...updateData } = input;
-	const product = await updateProductMutation(id, organizationId, updateData);
+	const product = await updateProductMutation(id, organizationId, updateData, userId);
 
 	if (!product) {
 		throw new TRPCError({
@@ -62,6 +67,7 @@ export async function deleteProduct(
 	input: { id: string },
 ) {
 	const organizationId = ctx.session?.session?.activeOrganizationId;
+	const userId = ctx.session?.user?.id;
 	if (!organizationId) {
 		throw new TRPCError({
 			code: "BAD_REQUEST",
@@ -69,7 +75,7 @@ export async function deleteProduct(
 		});
 	}
 
-	const product = await deleteProductMutation(input.id, organizationId);
+	const product = await deleteProductMutation(input.id, organizationId, userId);
 
 	if (!product) {
 		throw new TRPCError({
