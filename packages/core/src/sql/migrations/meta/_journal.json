@@ -57,6 +57,13 @@
       "when": 1768126471227,
       "tag": "0007_lush_maestro",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768156843770,
+      "tag": "0008_narrow_otto_octavius",
+      "breakpoints": true
     }
   ]
 }

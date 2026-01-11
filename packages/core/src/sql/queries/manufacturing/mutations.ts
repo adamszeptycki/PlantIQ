@@ -3,12 +3,18 @@ import {
 	boms,
 	bomLineItems,
 	manufacturingOrders,
+	workOrders,
+	timeEntries,
 	type Bom,
 	type BomLineItem,
 	type InsertBom,
 	type InsertBomLineItem,
 	type InsertManufacturingOrder,
+	type InsertWorkOrder,
+	type InsertTimeEntry,
 	type ManufacturingOrder,
+	type WorkOrder,
+	type TimeEntry,
 } from "@starter/core/src/sql/schema";
 import { and, eq } from "drizzle-orm";
 
@@ -150,4 +156,104 @@ export const updateManufacturingOrderStatus = async (
 	status: string,
 ): Promise<ManufacturingOrder | null> => {
 	return updateManufacturingOrder(id, organizationId, { status: status as any });
+};
+
+// Work Orders
+export const createWorkOrder = async (data: InsertWorkOrder): Promise<WorkOrder> => {
+	const db = getDb();
+	const [newWO] = await db.insert(workOrders).values(data).returning();
+	if (!newWO) {
+		throw new Error("Failed to create work order");
+	}
+	return newWO;
+};
+
+export const updateWorkOrder = async (
+	id: string,
+	organizationId: string,
+	data: Partial<InsertWorkOrder>,
+): Promise<WorkOrder | null> => {
+	const db = getDb();
+	const [updatedWO] = await db
+		.update(workOrders)
+		.set({ ...data, updatedAt: new Date() })
+		.where(
+			and(
+				eq(workOrders.id, id),
+				eq(workOrders.organizationId, organizationId),
+			),
+		)
+		.returning();
+	return updatedWO || null;
+};
+
+export const deleteWorkOrder = async (
+	id: string,
+	organizationId: string,
+): Promise<WorkOrder | null> => {
+	const db = getDb();
+	const [deletedWO] = await db
+		.delete(workOrders)
+		.where(
+			and(
+				eq(workOrders.id, id),
+				eq(workOrders.organizationId, organizationId),
+			),
+		)
+		.returning();
+	return deletedWO || null;
+};
+
+export const updateWorkOrderStatus = async (
+	id: string,
+	organizationId: string,
+	status: string,
+): Promise<WorkOrder | null> => {
+	return updateWorkOrder(id, organizationId, { status: status as any });
+};
+
+// Time Entries
+export const createTimeEntry = async (data: InsertTimeEntry): Promise<TimeEntry> => {
+	const db = getDb();
+	const [newEntry] = await db.insert(timeEntries).values(data).returning();
+	if (!newEntry) {
+		throw new Error("Failed to create time entry");
+	}
+	return newEntry;
+};
+
+export const updateTimeEntry = async (
+	id: string,
+	organizationId: string,
+	data: Partial<InsertTimeEntry>,
+): Promise<TimeEntry | null> => {
+	const db = getDb();
+	const [updatedEntry] = await db
+		.update(timeEntries)
+		.set({ ...data, updatedAt: new Date() })
+		.where(
+			and(
+				eq(timeEntries.id, id),
+				eq(timeEntries.organizationId, organizationId),
+			),
+		)
+		.returning();
+	return updatedEntry || null;
+};
+
+export const deleteTimeEntry = async (
+	id: string,
+	organizationId: string,
+): Promise<TimeEntry | null> => {
+	const db = getDb();
+	const [deletedEntry] = await db
+		.delete(timeEntries)
+		.where(
+			and(
+				eq(timeEntries.id, id),
+				eq(timeEntries.organizationId, organizationId),
+			),
+		)
+		.returning();
+	return deletedEntry || null;
 };

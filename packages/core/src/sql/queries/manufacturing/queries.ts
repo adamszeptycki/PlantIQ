@@ -3,9 +3,13 @@ import {
 	boms,
 	bomLineItems,
 	manufacturingOrders,
+	workOrders,
+	timeEntries,
 	type Bom,
 	type BomLineItem,
 	type ManufacturingOrder,
+	type WorkOrder,
+	type TimeEntry,
 } from "@starter/core/src/sql/schema";
 import { and, desc, eq } from "drizzle-orm";
 
@@ -143,4 +147,94 @@ export const countManufacturingOrders = async (organizationId: string): Promise<
 		.from(manufacturingOrders)
 		.where(eq(manufacturingOrders.organizationId, organizationId));
 	return Number(result?.count) || 0;
+};
+
+// Work Orders
+type ListWorkOrdersArgs = {
+	organizationId: string;
+	manufacturingOrderId?: string | null;
+	status?: string | null;
+	assignedTo?: string | null;
+	limit?: number;
+	offset?: number;
+};
+
+export const listWorkOrders = async ({
+	organizationId,
+	manufacturingOrderId,
+	status,
+	assignedTo,
+	limit = 50,
+	offset = 0,
+}: ListWorkOrdersArgs): Promise<WorkOrder[]> => {
+	const db = getDb();
+
+	const conditions = [eq(workOrders.organizationId, organizationId)];
+
+	if (manufacturingOrderId) {
+		conditions.push(eq(workOrders.manufacturingOrderId, manufacturingOrderId));
+	}
+
+	if (status) {
+		conditions.push(eq(workOrders.status, status as any));
+	}
+
+	if (assignedTo) {
+		conditions.push(eq(workOrders.assignedTo, assignedTo));
+	}
+
+	const results = await db
+		.select()
+		.from(workOrders)
+		.where(and(...conditions))
+		.orderBy(workOrders.sequence, desc(workOrders.createdAt))
+		.limit(limit)
+		.offset(offset);
+
+	return results;
+};
+
+export const getWorkOrderById = async (
+	id: string,
+	organizationId: string,
+): Promise<WorkOrder | null> => {
+	const db = getDb();
+	const [wo] = await db
+		.select()
+		.from(workOrders)
+		.where(
+			and(
+				eq(workOrders.id, id),
+				eq(workOrders.organizationId, organizationId),
+			),
+		);
+	return wo || null;
+};
+
+export const countWorkOrders = async (organizationId: string): Promise<number> => {
+	const db = getDb();
+	const [result] = await db
+		.select({ count: workOrders.id })
+		.from(workOrders)
+		.where(eq(workOrders.organizationId, organizationId));
+	return Number(result?.count) || 0;
+};
+
+// Time Entries
+export const getTimeEntriesByWorkOrder = async (
+	workOrderId: string,
+	organizationId: string,
+): Promise<TimeEntry[]> => {
+	const db = getDb();
+	const results = await db
+		.select()
+		.from(timeEntries)
+		.where(
+			and(
+				eq(timeEntries.workOrderId, workOrderId),
+				eq(timeEntries.organizationId, organizationId),
+			),
+		)
+		.orderBy(desc(timeEntries.startTime));
+	return results;
 };

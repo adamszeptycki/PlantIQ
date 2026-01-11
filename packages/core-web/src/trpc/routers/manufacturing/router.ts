@@ -8,11 +8,16 @@ import {
 	CreateBomLineItemSchema,
 	CreateBomSchema,
 	CreateManufacturingOrderSchema,
+	CreateWorkOrderSchema,
+	CreateTimeEntrySchema,
 	ListBomsSchema,
 	ListManufacturingOrdersSchema,
+	ListWorkOrdersSchema,
 	UpdateBomLineItemSchema,
 	UpdateBomSchema,
 	UpdateManufacturingOrderSchema,
+	UpdateWorkOrderSchema,
+	UpdateTimeEntrySchema,
 } from "./schema";
 
 export const manufacturingRouter = createTRPCRouter({
@@ -147,5 +152,96 @@ export const manufacturingRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			return manufacturingFunctions.updateManufacturingOrderStatus(ctx, input);
+		}),
+
+	// Work Orders
+	createWorkOrder: protectedProcedureWithOrganization
+		.input(CreateWorkOrderSchema)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.createWorkOrder(ctx, input);
+		}),
+
+	updateWorkOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}).merge(UpdateWorkOrderSchema),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.updateWorkOrder(ctx, input);
+		}),
+
+	deleteWorkOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.deleteWorkOrder(ctx, input);
+		}),
+
+	listWorkOrders: protectedProcedureWithOrganization
+		.input(ListWorkOrdersSchema)
+		.query(async ({ ctx, input }) => {
+			return manufacturingFunctions.listWorkOrders(ctx, input);
+		}),
+
+	getWorkOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return manufacturingFunctions.getWorkOrder(ctx, input);
+		}),
+
+	updateWorkOrderStatus: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+				status: z.enum(["pending", "in_progress", "completed", "cancelled"]),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.updateWorkOrderStatus(ctx, input);
+		}),
+
+	// Time Entries
+	createTimeEntry: protectedProcedureWithOrganization
+		.input(CreateTimeEntrySchema)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.createTimeEntry(ctx, input);
+		}),
+
+	updateTimeEntry: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}).merge(UpdateTimeEntrySchema),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.updateTimeEntry(ctx, input);
+		}),
+
+	deleteTimeEntry: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return manufacturingFunctions.deleteTimeEntry(ctx, input);
+		}),
+
+	getWorkOrderTimeEntries: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				workOrderId: z.string().uuid(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return manufacturingFunctions.getWorkOrderTimeEntries(ctx, input);
 		}),
 });

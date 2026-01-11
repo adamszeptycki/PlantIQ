@@ -1,7 +1,7 @@
 import { defaultFields } from "@starter/core/src/sql/utils";
-import { boolean, date, numeric, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { boolean, date, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { bomTypeEnum, moStatusEnum } from "./enums";
+import { bomTypeEnum, moStatusEnum, workOrderStatusEnum } from "./enums";
 import { organizations } from "./auth";
 import { products } from "./products";
 import { users } from "./auth";
@@ -80,3 +80,57 @@ export const InsertManufacturingOrderSchema = createInsertSchema(manufacturingOr
 });
 export type ManufacturingOrder = typeof manufacturingOrders.$inferSelect;
 export type InsertManufacturingOrder = typeof manufacturingOrders.$inferInsert;
+
+// Work Orders (Operations within a Manufacturing Order)
+export const workOrders = pgTable("work_orders", {
+	...defaultFields,
+	organizationId: uuid("organization_id")
+		.notNull()
+		.references(() => organizations.id, { onDelete: "cascade" }),
+	manufacturingOrderId: uuid("manufacturing_order_id")
+		.notNull()
+		.references(() => manufacturingOrders.id, { onDelete: "cascade" }),
+	woNumber: text("wo_number").notNull(),
+	name: text("name").notNull(),
+	description: text("description"),
+	status: workOrderStatusEnum("status").default("pending").notNull(),
+	assignedTo: uuid("assigned_to").references(() => users.id, { onDelete: "set null" }),
+	sequence: numeric("sequence", { precision: 5, scale: 0 }).default("0"),
+	estimatedDuration: numeric("estimated_duration", { precision: 8, scale: 2 }),
+	actualDuration: numeric("actual_duration", { precision: 8, scale: 2 }),
+	startedAt: timestamp("started_at"),
+	completedAt: timestamp("completed_at"),
+	notes: text("notes"),
+});
+
+export const WorkOrderSchema = createSelectSchema(workOrders);
+export const InsertWorkOrderSchema = createInsertSchema(workOrders).omit({
+	id: true,
+});
+export type WorkOrder = typeof workOrders.$inferSelect;
+export type InsertWorkOrder = typeof workOrders.$inferInsert;
+
+// Time Entries (Labor tracking)
+export const timeEntries = pgTable("time_entries", {
+	...defaultFields,
+	organizationId: uuid("organization_id")
+		.notNull()
+		.references(() => organizations.id, { onDelete: "cascade" }),
+	workOrderId: uuid("work_order_id")
+		.notNull()
+		.references(() => workOrders.id, { onDelete: "cascade" }),
+	userId: uuid("user_id")
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	startTime: timestamp("start_time").notNull(),
+	endTime: timestamp("end_time"),
+	duration: numeric("duration", { precision: 8, scale: 2 }),
+	notes: text("notes"),
+});
+
+export const TimeEntrySchema = createSelectSchema(timeEntries);
+export const InsertTimeEntrySchema = createInsertSchema(timeEntries).omit({
+	id: true,
+});
+export type TimeEntry = typeof timeEntries.$inferSelect;
+export type InsertTimeEntry = typeof timeEntries.$inferInsert;

@@ -60,3 +60,44 @@ export const ListManufacturingOrdersSchema = z.object({
 export type CreateManufacturingOrderArgs = z.infer<typeof CreateManufacturingOrderSchema>;
 export type UpdateManufacturingOrderArgs = z.infer<typeof UpdateManufacturingOrderSchema>;
 export type ListManufacturingOrdersArgs = z.infer<typeof ListManufacturingOrdersSchema>;
+
+// Work Orders
+export const CreateWorkOrderSchema = z.object({
+	manufacturingOrderId: z.string().uuid(),
+	woNumber: z.string().min(1, "WO number is required"),
+	name: z.string().min(1, "Name is required"),
+	description: z.string().nullable().optional(),
+	status: z.enum(["pending", "in_progress", "completed", "cancelled"]).default("pending"),
+	assignedTo: z.string().uuid().nullable().optional(),
+	sequence: z.string().default("0"),
+	estimatedDuration: z.string().nullable().optional(),
+	notes: z.string().nullable().optional(),
+});
+
+export const UpdateWorkOrderSchema = CreateWorkOrderSchema.partial();
+
+export const ListWorkOrdersSchema = z.object({
+	manufacturingOrderId: z.string().uuid().nullable().optional(),
+	status: z.string().nullable().optional(),
+	assignedTo: z.string().uuid().nullable().optional(),
+	limit: z.number().int().min(1).max(100).default(50),
+	offset: z.number().int().min(0).default(0),
+});
+
+export type CreateWorkOrderArgs = z.infer<typeof CreateWorkOrderSchema>;
+export type UpdateWorkOrderArgs = z.infer<typeof UpdateWorkOrderSchema>;
+export type ListWorkOrdersArgs = z.infer<typeof ListWorkOrdersSchema>;
+
+// Time Entries
+export const CreateTimeEntrySchema = z.object({
+	workOrderId: z.string().uuid(),
+	startTime: z.string(),
+	endTime: z.string().nullable().optional(),
+	duration: z.string().nullable().optional(),
+	notes: z.string().nullable().optional(),
+});
+
+export const UpdateTimeEntrySchema = CreateTimeEntrySchema.partial();
+
+export type CreateTimeEntryArgs = z.infer<typeof CreateTimeEntrySchema>;
+export type UpdateTimeEntryArgs = z.infer<typeof UpdateTimeEntrySchema>;
