@@ -8,3 +8,4 @@ export * from "./sales";
 export * from "./manufacturing";
 export * from "./purchasing";
 export * from "./accounting";
+export * from "./audit";
