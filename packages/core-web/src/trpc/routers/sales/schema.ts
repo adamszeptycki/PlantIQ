@@ -93,3 +93,51 @@ export type UpdateQuoteArgs = z.infer<typeof UpdateQuoteSchema>;
 export type ListQuotesArgs = z.infer<typeof ListQuotesSchema>;
 export type CreateQuoteLineItemArgs = z.infer<typeof CreateQuoteLineItemSchema>;
 export type UpdateQuoteLineItemArgs = z.infer<typeof UpdateQuoteLineItemSchema>;
+
+// Sales Orders
+export const CreateSalesOrderSchema = z.object({
+	customerId: z.string().uuid(),
+	quoteId: z.string().uuid().nullable().optional(),
+	orderNumber: z.string().min(1, "Order number is required"),
+	status: z
+		.enum(["draft", "confirmed", "in_production", "ready", "delivered", "invoiced", "cancelled"])
+		.default("draft"),
+	orderDate: z.string().nullable().optional(),
+	expectedDeliveryDate: z.string().nullable().optional(),
+	shippingAddress: z.string().nullable().optional(),
+	shippingCity: z.string().nullable().optional(),
+	shippingState: z.string().nullable().optional(),
+	shippingZipCode: z.string().nullable().optional(),
+	shippingCountry: z.string().nullable().optional(),
+	shippingCost: z.string().default("0"),
+	taxAmount: z.string().default("0"),
+	notes: z.string().nullable().optional(),
+});
+
+export const UpdateSalesOrderSchema = CreateSalesOrderSchema.partial();
+
+export const ListSalesOrdersSchema = z.object({
+	customerId: z.string().uuid().nullable().optional(),
+	status: z.string().nullable().optional(),
+	search: z.string().nullable().optional(),
+	limit: z.number().int().min(1).max(100).default(50),
+	offset: z.number().int().min(0).default(0),
+});
+
+export const CreateSalesOrderLineItemSchema = z.object({
+	salesOrderId: z.string().uuid(),
+	productId: z.string().uuid(),
+	quantity: z.string().min(1, "Quantity is required"),
+	unitPrice: z.string().min(1, "Unit price is required"),
+	discount: z.string().default("0"),
+	lineTotal: z.string().min(1, "Line total is required"),
+	notes: z.string().nullable().optional(),
+});
+
+export const UpdateSalesOrderLineItemSchema = CreateSalesOrderLineItemSchema.partial();
+
+export type CreateSalesOrderArgs = z.infer<typeof CreateSalesOrderSchema>;
+export type UpdateSalesOrderArgs = z.infer<typeof UpdateSalesOrderSchema>;
+export type ListSalesOrdersArgs = z.infer<typeof ListSalesOrdersSchema>;
+export type CreateSalesOrderLineItemArgs = z.infer<typeof CreateSalesOrderLineItemSchema>;
+export type UpdateSalesOrderLineItemArgs = z.infer<typeof UpdateSalesOrderLineItemSchema>;

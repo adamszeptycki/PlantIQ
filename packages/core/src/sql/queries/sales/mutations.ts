@@ -4,14 +4,20 @@ import {
 	leads,
 	quotes,
 	quoteLineItems,
+	salesOrders,
+	salesOrderLineItems,
 	type Customer,
 	type InsertCustomer,
 	type InsertLead,
 	type InsertQuote,
 	type InsertQuoteLineItem,
+	type InsertSalesOrder,
+	type InsertSalesOrderLineItem,
 	type Lead,
 	type Quote,
 	type QuoteLineItem,
+	type SalesOrder,
+	type SalesOrderLineItem,
 } from "@starter/core/src/sql/schema";
 import { and, eq, sql } from "drizzle-orm";
 
@@ -266,4 +272,165 @@ const recalculateQuoteTotals = async (
 			updatedAt: new Date(),
 		})
 		.where(and(eq(quotes.id, quoteId), eq(quotes.organizationId, organizationId)));
+};
+
+// Sales Orders
+export const createSalesOrder = async (data: InsertSalesOrder): Promise<SalesOrder> => {
+	const db = getDb();
+	const [newSalesOrder] = await db.insert(salesOrders).values(data).returning();
+	if (!newSalesOrder) {
+		throw new Error("Failed to create sales order");
+	}
+	return newSalesOrder;
+};
+
+export const updateSalesOrder = async (
+	id: string,
+	organizationId: string,
+	data: Partial<InsertSalesOrder>,
+): Promise<SalesOrder | null> => {
+	const db = getDb();
+	const [updatedSalesOrder] = await db
+		.update(salesOrders)
+		.set({ ...data, updatedAt: new Date() })
+		.where(and(eq(salesOrders.id, id), eq(salesOrders.organizationId, organizationId)))
+		.returning();
+	return updatedSalesOrder || null;
+};
+
+export const deleteSalesOrder = async (
+	id: string,
+	organizationId: string,
+): Promise<SalesOrder | null> => {
+	const db = getDb();
+	const [deletedSalesOrder] = await db
+		.delete(salesOrders)
+		.where(and(eq(salesOrders.id, id), eq(salesOrders.organizationId, organizationId)))
+		.returning();
+	return deletedSalesOrder || null;
+};
+
+export const updateSalesOrderStatus = async (
+	id: string,
+	organizationId: string,
+	status: string,
+): Promise<SalesOrder | null> => {
+	return updateSalesOrder(id, organizationId, { status: status as any });
+};
+
+// Sales Order Line Items
+export const addSalesOrderLineItem = async (
+	data: InsertSalesOrderLineItem,
+): Promise<SalesOrderLineItem> => {
+	const db = getDb();
+	const [newLineItem] = await db.insert(salesOrderLineItems).values(data).returning();
+	if (!newLineItem) {
+		throw new Error("Failed to add sales order line item");
+	}
+
+	// Recalculate sales order totals
+	await recalculateSalesOrderTotals(data.salesOrderId, data.organizationId);
+
+	return newLineItem;
+};
+
+export const updateSalesOrderLineItem = async (
+	id: string,
+	organizationId: string,
+	data: Partial<InsertSalesOrderLineItem>,
+): Promise<SalesOrderLineItem | null> => {
+	const db = getDb();
+	const [updatedLineItem] = await db
+		.update(salesOrderLineItems)
+		.set({ ...data, updatedAt: new Date() })
+		.where(
+			and(
+				eq(salesOrderLineItems.id, id),
+				eq(salesOrderLineItems.organizationId, organizationId),
+			),
+		)
+		.returning();
+
+	// Recalculate sales order totals if line item was updated
+	if (updatedLineItem) {
+		await recalculateSalesOrderTotals(updatedLineItem.salesOrderId, organizationId);
+	}
+
+	return updatedLineItem || null;
+};
+
+export const deleteSalesOrderLineItem = async (
+	id: string,
+	organizationId: string,
+): Promise<SalesOrderLineItem | null> => {
+	const db = getDb();
+	const [deletedLineItem] = await db
+		.delete(salesOrderLineItems)
+		.where(
+			and(
+				eq(salesOrderLineItems.id, id),
+				eq(salesOrderLineItems.organizationId, organizationId),
+			),
+		)
+		.returning();
+
+	// Recalculate sales order totals if line item was deleted
+	if (deletedLineItem) {
+		await recalculateSalesOrderTotals(deletedLineItem.salesOrderId, organizationId);
+	}
+
+	return deletedLineItem || null;
+};
+
+// Helper function to recalculate sales order totals
+const recalculateSalesOrderTotals = async (
+	salesOrderId: string,
+	organizationId: string,
+): Promise<void> => {
+	const db = getDb();
+
+	// Sum all line totals
+	const [result] = await db
+		.select({
+			subtotal: sql<string>`COALESCE(SUM(${salesOrderLineItems.lineTotal}), 0)`,
+		})
+		.from(salesOrderLineItems)
+		.where(
+			and(
+				eq(salesOrderLineItems.salesOrderId, salesOrderId),
+				eq(salesOrderLineItems.organizationId, organizationId),
+			),
+		);
+
+	const subtotal = result?.subtotal || "0";
+
+	// Get current sales order to preserve shipping cost and tax
+	const [currentOrder] = await db
+		.select()
+		.from(salesOrders)
+		.where(
+			and(
+				eq(salesOrders.id, salesOrderId),
+				eq(salesOrders.organizationId, organizationId),
+			),
+		);
+
+	const shippingCost = Number.parseFloat(currentOrder?.shippingCost || "0");
+	const taxAmount = Number.parseFloat(currentOrder?.taxAmount || "0");
+	const total = Number.parseFloat(subtotal) + shippingCost + taxAmount;
+
+	// Update sales order totals
+	await db
+		.update(salesOrders)
+		.set({
+			subtotal,
+			total: total.toString(),
+			updatedAt: new Date(),
+		})
+		.where(
+			and(
+				eq(salesOrders.id, salesOrderId),
+				eq(salesOrders.organizationId, organizationId),
+			),
+		);
 };

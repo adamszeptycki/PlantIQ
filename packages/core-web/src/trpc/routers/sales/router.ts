@@ -9,13 +9,18 @@ import {
 	CreateLeadSchema,
 	CreateQuoteLineItemSchema,
 	CreateQuoteSchema,
+	CreateSalesOrderLineItemSchema,
+	CreateSalesOrderSchema,
 	ListCustomersSchema,
 	ListLeadsSchema,
 	ListQuotesSchema,
+	ListSalesOrdersSchema,
 	UpdateCustomerSchema,
 	UpdateLeadSchema,
 	UpdateQuoteLineItemSchema,
 	UpdateQuoteSchema,
+	UpdateSalesOrderLineItemSchema,
+	UpdateSalesOrderSchema,
 } from "./schema";
 
 export const salesRouter = createTRPCRouter({
@@ -225,5 +230,103 @@ export const salesRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			return salesFunctions.deleteQuoteLineItem(ctx, input);
+		}),
+
+	// Sales Orders
+	createSalesOrder: protectedProcedureWithOrganization
+		.input(CreateSalesOrderSchema)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.createSalesOrder(ctx, input);
+		}),
+
+	updateSalesOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}).merge(UpdateSalesOrderSchema),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.updateSalesOrder(ctx, input);
+		}),
+
+	deleteSalesOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.deleteSalesOrder(ctx, input);
+		}),
+
+	listSalesOrders: protectedProcedureWithOrganization
+		.input(ListSalesOrdersSchema)
+		.query(async ({ ctx, input }) => {
+			return salesFunctions.listSalesOrders(ctx, input);
+		}),
+
+	getSalesOrder: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return salesFunctions.getSalesOrder(ctx, input);
+		}),
+
+	updateSalesOrderStatus: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+				status: z.enum([
+					"draft",
+					"confirmed",
+					"in_production",
+					"ready",
+					"delivered",
+					"invoiced",
+					"cancelled",
+				]),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.updateSalesOrderStatus(ctx, input);
+		}),
+
+	getSalesOrderLineItems: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				salesOrderId: z.string().uuid(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			return salesFunctions.getSalesOrderLineItems(ctx, input);
+		}),
+
+	addSalesOrderLineItem: protectedProcedureWithOrganization
+		.input(CreateSalesOrderLineItemSchema)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.addSalesOrderLineItem(ctx, input);
+		}),
+
+	updateSalesOrderLineItem: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}).merge(UpdateSalesOrderLineItemSchema),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.updateSalesOrderLineItem(ctx, input);
+		}),
+
+	deleteSalesOrderLineItem: protectedProcedureWithOrganization
+		.input(
+			z.object({
+				id: z.string().uuid(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			return salesFunctions.deleteSalesOrderLineItem(ctx, input);
 		}),
 });

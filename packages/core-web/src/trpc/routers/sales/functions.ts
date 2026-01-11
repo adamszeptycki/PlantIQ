@@ -1,33 +1,44 @@
 import type { Context } from "@starter/core-web/src/trpc/context";
 import {
 	addQuoteLineItem as addQuoteLineItemMutation,
+	addSalesOrderLineItem as addSalesOrderLineItemMutation,
 	assignLead as assignLeadMutation,
 	convertLeadToCustomer as convertLeadToCustomerMutation,
 	createCustomer as createCustomerMutation,
 	createLead as createLeadMutation,
 	createQuote as createQuoteMutation,
+	createSalesOrder as createSalesOrderMutation,
 	deleteCustomer as deleteCustomerMutation,
 	deleteLead as deleteLeadMutation,
 	deleteQuote as deleteQuoteMutation,
 	deleteQuoteLineItem as deleteQuoteLineItemMutation,
+	deleteSalesOrder as deleteSalesOrderMutation,
+	deleteSalesOrderLineItem as deleteSalesOrderLineItemMutation,
 	updateCustomer as updateCustomerMutation,
 	updateLead as updateLeadMutation,
 	updateLeadStatus as updateLeadStatusMutation,
 	updateQuote as updateQuoteMutation,
 	updateQuoteLineItem as updateQuoteLineItemMutation,
 	updateQuoteStatus as updateQuoteStatusMutation,
+	updateSalesOrder as updateSalesOrderMutation,
+	updateSalesOrderLineItem as updateSalesOrderLineItemMutation,
+	updateSalesOrderStatus as updateSalesOrderStatusMutation,
 } from "@starter/core/src/sql/queries/sales/mutations";
 import {
 	countCustomers as countCustomersQuery,
 	countLeads as countLeadsQuery,
 	countQuotes as countQuotesQuery,
+	countSalesOrders as countSalesOrdersQuery,
 	getCustomerById as getCustomerByIdQuery,
 	getLeadById as getLeadByIdQuery,
 	getQuoteById as getQuoteByIdQuery,
 	getQuoteLineItems as getQuoteLineItemsQuery,
+	getSalesOrderById as getSalesOrderByIdQuery,
+	getSalesOrderLineItems as getSalesOrderLineItemsQuery,
 	listCustomers as listCustomersQuery,
 	listLeads as listLeadsQuery,
 	listQuotes as listQuotesQuery,
+	listSalesOrders as listSalesOrdersQuery,
 } from "@starter/core/src/sql/queries/sales/queries";
 import { TRPCError } from "@trpc/server";
 import type {
@@ -35,13 +46,18 @@ import type {
 	CreateLeadArgs,
 	CreateQuoteArgs,
 	CreateQuoteLineItemArgs,
+	CreateSalesOrderArgs,
+	CreateSalesOrderLineItemArgs,
 	ListCustomersArgs,
 	ListLeadsArgs,
 	ListQuotesArgs,
+	ListSalesOrdersArgs,
 	UpdateCustomerArgs,
 	UpdateLeadArgs,
 	UpdateQuoteArgs,
 	UpdateQuoteLineItemArgs,
+	UpdateSalesOrderArgs,
+	UpdateSalesOrderLineItemArgs,
 } from "./schema";
 
 // Customers
@@ -512,6 +528,225 @@ export async function deleteQuoteLineItem(ctx: Context, input: { id: string }) {
 		throw new TRPCError({
 			code: "NOT_FOUND",
 			message: "Quote line item not found",
+		});
+	}
+
+	return { success: true, lineItem };
+}
+
+// Sales Orders
+export async function createSalesOrder(ctx: Context, input: CreateSalesOrderArgs) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const salesOrder = await createSalesOrderMutation({
+		...input,
+		organizationId,
+		subtotal: "0",
+		total: "0",
+	});
+
+	return salesOrder;
+}
+
+export async function updateSalesOrder(
+	ctx: Context,
+	input: UpdateSalesOrderArgs & { id: string },
+) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const { id, ...updateData } = input;
+	const salesOrder = await updateSalesOrderMutation(id, organizationId, updateData);
+
+	if (!salesOrder) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Sales order not found",
+		});
+	}
+
+	return salesOrder;
+}
+
+export async function deleteSalesOrder(ctx: Context, input: { id: string }) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const salesOrder = await deleteSalesOrderMutation(input.id, organizationId);
+
+	if (!salesOrder) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Sales order not found",
+		});
+	}
+
+	return { success: true, salesOrder };
+}
+
+export async function listSalesOrders(ctx: Context, input: ListSalesOrdersArgs) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const [salesOrders, total] = await Promise.all([
+		listSalesOrdersQuery({ ...input, organizationId }),
+		countSalesOrdersQuery(organizationId),
+	]);
+
+	return {
+		salesOrders,
+		total,
+		hasMore: input.offset + input.limit < total,
+	};
+}
+
+export async function getSalesOrder(ctx: Context, input: { id: string }) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const salesOrder = await getSalesOrderByIdQuery(input.id, organizationId);
+
+	if (!salesOrder) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Sales order not found",
+		});
+	}
+
+	return salesOrder;
+}
+
+export async function updateSalesOrderStatus(
+	ctx: Context,
+	input: { id: string; status: string },
+) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const salesOrder = await updateSalesOrderStatusMutation(
+		input.id,
+		organizationId,
+		input.status,
+	);
+
+	if (!salesOrder) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Sales order not found",
+		});
+	}
+
+	return salesOrder;
+}
+
+export async function getSalesOrderLineItems(
+	ctx: Context,
+	input: { salesOrderId: string },
+) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const lineItems = await getSalesOrderLineItemsQuery(input.salesOrderId, organizationId);
+
+	return lineItems;
+}
+
+export async function addSalesOrderLineItem(
+	ctx: Context,
+	input: CreateSalesOrderLineItemArgs,
+) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const lineItem = await addSalesOrderLineItemMutation({
+		...input,
+		organizationId,
+	});
+
+	return lineItem;
+}
+
+export async function updateSalesOrderLineItem(
+	ctx: Context,
+	input: UpdateSalesOrderLineItemArgs & { id: string },
+) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const { id, ...updateData } = input;
+	const lineItem = await updateSalesOrderLineItemMutation(id, organizationId, updateData);
+
+	if (!lineItem) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Sales order line item not found",
+		});
+	}
+
+	return lineItem;
+}
+
+export async function deleteSalesOrderLineItem(ctx: Context, input: { id: string }) {
+	const organizationId = ctx.session?.session?.activeOrganizationId;
+	if (!organizationId) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "No active organization",
+		});
+	}
+
+	const lineItem = await deleteSalesOrderLineItemMutation(input.id, organizationId);
+
+	if (!lineItem) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Sales order line item not found",
 		});
 	}
 

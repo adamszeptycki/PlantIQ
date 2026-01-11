@@ -4,10 +4,14 @@ import {
 	leads,
 	quotes,
 	quoteLineItems,
+	salesOrders,
+	salesOrderLineItems,
 	type Customer,
 	type Lead,
 	type Quote,
 	type QuoteLineItem,
+	type SalesOrder,
+	type SalesOrderLineItem,
 } from "@starter/core/src/sql/schema";
 import { and, desc, eq, ilike, or } from "drizzle-orm";
 
@@ -232,6 +236,89 @@ export const getQuoteLineItems = async (
 			and(
 				eq(quoteLineItems.quoteId, quoteId),
 				eq(quoteLineItems.organizationId, organizationId),
+			),
+		);
+	return results;
+};
+
+// Sales Orders
+type ListSalesOrdersArgs = {
+	organizationId: string;
+	customerId?: string | null;
+	status?: string | null;
+	search?: string | null;
+	limit?: number;
+	offset?: number;
+};
+
+export const listSalesOrders = async ({
+	organizationId,
+	customerId,
+	status,
+	search,
+	limit = 50,
+	offset = 0,
+}: ListSalesOrdersArgs): Promise<SalesOrder[]> => {
+	const db = getDb();
+
+	const conditions = [eq(salesOrders.organizationId, organizationId)];
+
+	if (customerId) {
+		conditions.push(eq(salesOrders.customerId, customerId));
+	}
+
+	if (status) {
+		conditions.push(eq(salesOrders.status, status as any));
+	}
+
+	if (search && search.length > 0) {
+		conditions.push(ilike(salesOrders.orderNumber, `%${search}%`));
+	}
+
+	const results = await db
+		.select()
+		.from(salesOrders)
+		.where(and(...conditions))
+		.orderBy(desc(salesOrders.createdAt))
+		.limit(limit)
+		.offset(offset);
+
+	return results;
+};
+
+export const getSalesOrderById = async (
+	id: string,
+	organizationId: string,
+): Promise<SalesOrder | null> => {
+	const db = getDb();
+	const [salesOrder] = await db
+		.select()
+		.from(salesOrders)
+		.where(and(eq(salesOrders.id, id), eq(salesOrders.organizationId, organizationId)));
+	return salesOrder || null;
+};
+
+export const countSalesOrders = async (organizationId: string): Promise<number> => {
+	const db = getDb();
+	const [result] = await db
+		.select({ count: salesOrders.id })
+		.from(salesOrders)
+		.where(eq(salesOrders.organizationId, organizationId));
+	return Number(result?.count) || 0;
+};
+
+export const getSalesOrderLineItems = async (
+	salesOrderId: string,
+	organizationId: string,
+): Promise<SalesOrderLineItem[]> => {
+	const db = getDb();
+	const results = await db
+		.select()
+		.from(salesOrderLineItems)
+		.where(
+			and(
+				eq(salesOrderLineItems.salesOrderId, salesOrderId),
+				eq(salesOrderLineItems.organizationId, organizationId),
 			),
 		);
 	return results;
