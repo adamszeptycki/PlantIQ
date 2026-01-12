@@ -27,7 +27,7 @@ export function getDomain({
 
 const domain = getDomain({ skipLocalhost: true });
 
-export const router = new sst.aws.Router("StarterRouter", {
+export const router = new sst.aws.Router("PlantIQRouter", {
 	domain: {
 		name: domain,
 		aliases: [`*.${domain}`],

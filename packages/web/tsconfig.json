@@ -19,11 +19,11 @@
 		],
 		"paths": {
 			"@/*": ["./src/*"],
-			"@starter/core/*": ["../core/*"],
-			"@starter/types/*": ["../types/*"],
-			"@starter/core-web/*": ["../core-web/*"],
-			"@starter/functions/*": ["../functions/*"],
-			"@starter/web/*": ["./*"]
+			"@plantiq/core/*": ["../core/*"],
+			"@plantiq/types/*": ["../types/*"],
+			"@plantiq/core-web/*": ["../core-web/*"],
+			"@plantiq/functions/*": ["../functions/*"],
+			"@plantiq/web/*": ["./*"]
 		},
 		"target": "esnext",
 		"baseUrl": "./"

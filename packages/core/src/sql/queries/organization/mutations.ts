@@ -1,6 +1,6 @@
-import { getDb } from "@starter/core/src/sql";
-import type { Role } from "@starter/core/src/sql/schema";
-import { members, type Organization, organizations } from "@starter/core/src/sql/schema/auth";
+import { getDb } from "@plantiq/core/src/sql";
+import type { Role } from "@plantiq/core/src/sql/schema";
+import { members, type Organization, organizations } from "@plantiq/core/src/sql/schema/auth";
 import { and, eq } from "drizzle-orm";
 
 export type InsertOrganization = typeof organizations.$inferInsert;

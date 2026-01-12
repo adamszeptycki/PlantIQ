@@ -1,7 +1,7 @@
 import {
 	supervisorProcedure,
 	createTRPCRouter,
-} from "@starter/core-web/src/trpc/trpc";
+} from "@plantiq/core-web/src/trpc/trpc";
 import { z } from "zod";
 import * as manufacturingFunctions from "./functions";
 import {

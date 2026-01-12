@@ -1,5 +1,5 @@
 {
-	"name": "@starter/core-web",
+	"name": "@plantiq/core-web",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {

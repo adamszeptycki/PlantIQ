@@ -1,4 +1,4 @@
-import TrpcProvider from "@starter/core-web/src/trpc/Provider";
+import TrpcProvider from "@plantiq/core-web/src/trpc/Provider";
 
 export const getTrpcUrl = () => {
 	const base = (() => {		

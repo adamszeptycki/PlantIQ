@@ -1,4 +1,4 @@
-import { getDb } from "@starter/core/src/sql";
+import { getDb } from "@plantiq/core/src/sql";
 import {
 	boms,
 	bomLineItems,
@@ -15,7 +15,7 @@ import {
 	type ManufacturingOrder,
 	type WorkOrder,
 	type TimeEntry,
-} from "@starter/core/src/sql/schema";
+} from "@plantiq/core/src/sql/schema";
 import { and, eq } from "drizzle-orm";
 
 // BOMs

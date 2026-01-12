@@ -1,10 +1,10 @@
-import { auth } from "@starter/core-web/src/auth/auth";
+import { auth } from "@plantiq/core-web/src/auth/auth";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import type { Context } from "./context";
-import { checkUserHasErpRole } from "@starter/core/src/sql/queries/erp-roles/queries";
-import type { ErpRole } from "@starter/core/src/sql/schema/erp-roles";
+import { checkUserHasErpRole } from "@plantiq/core/src/sql/queries/erp-roles/queries";
+import type { ErpRole } from "@plantiq/core/src/sql/schema/erp-roles";
 
 const t = initTRPC.context<Context>().create({
 	transformer: superjson,

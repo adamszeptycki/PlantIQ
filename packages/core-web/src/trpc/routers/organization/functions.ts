@@ -1,7 +1,7 @@
-import { auth } from "@starter/core-web/src/auth/auth";
-import type { Context } from "@starter/core-web/src/trpc/context";
-import type { Organization } from "@starter/core/src/sql/schema/auth";
-import { updateOrganization as updateOrganizationMutation } from "@starter/core/src/sql/queries/organization/mutations";
+import { auth } from "@plantiq/core-web/src/auth/auth";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
+import type { Organization } from "@plantiq/core/src/sql/schema/auth";
+import { updateOrganization as updateOrganizationMutation } from "@plantiq/core/src/sql/queries/organization/mutations";
 import { TRPCError } from "@trpc/server";
 import type { CreateTenantArgs } from "./schema";
 

@@ -1,4 +1,4 @@
-import { getDb } from "@starter/core/src/sql";
+import { getDb } from "@plantiq/core/src/sql";
 	import {
 		accounts,
 		invitations,
@@ -7,7 +7,7 @@ import { getDb } from "@starter/core/src/sql";
 		sessions,
 		users,
 		verifications,
-	} from "@starter/core/src/sql/schema";
+	} from "@plantiq/core/src/sql/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -104,6 +104,8 @@ export const auth = betterAuth({
 	trustedOrigins: [
 		"http://localhost:*",
 		"https://localhost:*",
+		"http://localhost:3000",
+		"https://localhost:3000",
 		"http://localhost:3001",
 		"http://localhost:3002",
 		"http://localhost:3003",

@@ -5,8 +5,8 @@
     "moduleResolution": "Bundler",
     "baseUrl": "./",
     "paths": {
-			"@starter/core/*": ["../core/*"],
-      "@starter/types/*": ["../types/*"]
+			"@plantiq/core/*": ["../core/*"],
+      "@plantiq/types/*": ["../types/*"]
 		},
     "types": ["vitest/globals"]
   },

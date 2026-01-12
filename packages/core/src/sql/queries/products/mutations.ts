@@ -1,7 +1,7 @@
-import { getDb } from "@starter/core/src/sql";
-import { products, type InsertProduct, type Product } from "@starter/core/src/sql/schema";
+import { getDb } from "@plantiq/core/src/sql";
+import { products, type InsertProduct, type Product } from "@plantiq/core/src/sql/schema";
 import { and, eq } from "drizzle-orm";
-import { logCreate, logUpdate, logDelete } from "@starter/core/src/sql/queries/audit/mutations";
+import { logCreate, logUpdate, logDelete } from "@plantiq/core/src/sql/queries/audit/mutations";
 
 export const createProduct = async (
 	data: InsertProduct,

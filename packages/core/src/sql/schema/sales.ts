@@ -1,4 +1,4 @@
-import { defaultFields } from "@starter/core/src/sql/utils";
+import { defaultFields } from "@plantiq/core/src/sql/utils";
 import { date, integer, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { leadStatusEnum, quoteStatusEnum, salesOrderStatusEnum } from "./enums";

@@ -1,4 +1,4 @@
-Starter web app built on Next.js 15. It includes:
+PlantIQ web app built on Next.js 15. It includes:
 - Better Auth handler at `app/api/auth/[...all]/route.ts`
 - tRPC handler at `app/api/trpc/[trpc]/route.ts`
 - Auth pages (`/auth/sign-in`, `/auth/sign-up`) with minimal UI

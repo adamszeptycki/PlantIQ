@@ -1,7 +1,7 @@
 import { betterAuthSecret, dbUrl, resendApiKey } from "./config";
 import { getDomain, router } from "./router";
 
-export const nextJsPage = new sst.aws.Nextjs("StarterWeb", {
+export const nextJsPage = new sst.aws.Nextjs("PlantIQWeb", {
 	link: [betterAuthSecret, dbUrl, resendApiKey],
 	path: "packages/web",
 	route: $app.stage === "prod" ? { router } : undefined,

@@ -1,9 +1,13 @@
 {
-  "name": "@starter/core",
+  "name": "@plantiq/core",
   "type": "module",
   "version": "0.0.0",
   "scripts": {
     "test": "vitest",
+    "db:nuke:up": "pnpm db:nuke && pnpm db:up",
+    "db:nuke:up:migrate": "pnpm db:nuke && pnpm db:up && pnpm db:migrate:local",
+    "db:nuke": "docker-compose down --volumes --remove-orphans",
+    "db:up": "docker-compose up -d && sleep 3 && docker-compose exec -T core-airframe-db createdb -U postgres plantiq",
     "typecheck": "tsc --noEmit --strict",
     "db:migrate:local": "dotenvx run -f .env.dev -- drizzle-kit migrate",
     "db:generate:migrations": "dotenvx run -f .env.dev -- drizzle-kit generate"

@@ -17,9 +17,9 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@starter/core-web/*": ["../core-web/*"],
-      "@starter/web/*": ["../web/src/*"],
-      "@starter/ext/*": ["../ext/src/*"],
+      "@plantiq/core-web/*": ["../core-web/*"],
+      "@plantiq/web/*": ["../web/src/*"],
+      "@plantiq/ext/*": ["../ext/src/*"],
       "@src/*": ["src/*"],
       "@assets/*": ["src/assets/*"],
       "@locales/*": ["src/locales/*"],

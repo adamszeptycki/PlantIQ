@@ -5,7 +5,7 @@ export default function AcceptInvitationPage() {
 		<div className="p-8">
 			<h1 className="text-3xl font-bold mb-4">Invitations</h1>
 			<p className="text-slate-200">
-				Invitation handling is not wired in this starter. Integrate your own
+				Invitation handling is not wired in this plantiq. Integrate your own
 				invite acceptance flow using Better Auth or your preferred API.
 			</p>
 		</div>

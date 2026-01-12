@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { getDb } from "@starter/core/src/sql";
-import { userErpRoles } from "@starter/core/src/sql/schema";
+import { getDb } from "@plantiq/core/src/sql";
+import { userErpRoles } from "@plantiq/core/src/sql/schema";
 import { addUserErpRole, removeUserErpRole, setUserErpRoles } from "./mutations";
 import { getUserErpRoles, checkUserHasErpRole } from "./queries";
 

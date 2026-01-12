@@ -1,4 +1,4 @@
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 import {
 	createVendor as createVendorMutation,
 	updateVendor as updateVendorMutation,
@@ -13,7 +13,7 @@ import {
 	addPurchaseOrderLineItem as addPurchaseOrderLineItemMutation,
 	updatePurchaseOrderLineItem as updatePurchaseOrderLineItemMutation,
 	deletePurchaseOrderLineItem as deletePurchaseOrderLineItemMutation,
-} from "@starter/core/src/sql/queries/purchasing/mutations";
+} from "@plantiq/core/src/sql/queries/purchasing/mutations";
 import {
 	listVendors as listVendorsQuery,
 	getVendorById as getVendorByIdQuery,
@@ -25,7 +25,7 @@ import {
 	countPurchaseOrders as countPurchaseOrdersQuery,
 	getPurchaseOrderLineItems as getPurchaseOrderLineItemsQuery,
 	getPurchaseSuggestions as getPurchaseSuggestionsQuery,
-} from "@starter/core/src/sql/queries/purchasing/queries";
+} from "@plantiq/core/src/sql/queries/purchasing/queries";
 import { TRPCError } from "@trpc/server";
 import type {
 	CreateVendorArgs,

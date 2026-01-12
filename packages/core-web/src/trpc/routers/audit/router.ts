@@ -1,11 +1,11 @@
-import { adminProcedure, createTRPCRouter } from "@starter/core-web/src/trpc/trpc";
+import { adminProcedure, createTRPCRouter } from "@plantiq/core-web/src/trpc/trpc";
 import { z } from "zod";
 import {
 	listAuditLogs as listAuditLogsQuery,
 	getAuditLog as getAuditLogQuery,
-} from "@starter/core/src/sql/queries/audit/queries";
+} from "@plantiq/core/src/sql/queries/audit/queries";
 import { TRPCError } from "@trpc/server";
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 
 async function listAuditLogs(
 	ctx: Context,

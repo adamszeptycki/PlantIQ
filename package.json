@@ -1,6 +1,6 @@
 {
-  "name": "starter",
-  "productName": "Starter",
+  "name": "plantiq",
+  "productName": "PlantIQ",
   "version": "0.0.0",
   "workspaces": [
     "packages/*"
@@ -12,10 +12,14 @@
     "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "dev:ext": "pnpm -r run dev --filter ext",
-    "db:migrate:prod": "pnpm --filter @einstein/core db:migrate:prod",
-    "db:migrate:local": "pnpm --filter @einstein/core db:migrate:local",
-    "db:nuke:up": "pnpm --filter @einstein/core db:nuke:up",
-    "db:generate:migrations": "pnpm --filter @einstein/core db:generate:migrations"
+    "db:migrate:prod": "pnpm --filter @plantiq/core db:migrate:prod",
+    "db:migrate:local": "pnpm --filter @plantiq/core db:migrate:local",
+    "db:nuke:up": "pnpm --filter @plantiq/core db:nuke:up",
+    "db:generate:migrations": "pnpm --filter @plantiq/core db:generate:migrations",
+    "db:nuke:up:migrate": "pnpm --filter @plantiq/core db:nuke:up:migrate",
+    "db:nuke:up:migrate:local": "pnpm --filter @plantiq/core db:nuke:up:migrate",
+    "db:nuke": "pnpm --filter @plantiq/core db:nuke",
+    "db:up": "pnpm --filter @plantiq/core db:up"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.1",

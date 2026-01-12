@@ -1,4 +1,4 @@
-import { organizations, users } from "@starter/core/src/sql/schema/auth";
+import { organizations, users } from "@plantiq/core/src/sql/schema/auth";
 import { type AnyPgColumn, uuid } from "drizzle-orm/pg-core";
 
 const defaultOwnerFields = {

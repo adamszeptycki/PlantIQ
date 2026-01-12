@@ -1,5 +1,5 @@
-import { createTRPCContext } from "@starter/core-web/src/trpc/context";
-import { appRouter } from "@starter/core-web/src/trpc/routers/_app";
+import { createTRPCContext } from "@plantiq/core-web/src/trpc/context";
+import { appRouter } from "@plantiq/core-web/src/trpc/routers/_app";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import type { NextRequest } from "next/server";
 import { addCorsHeaders, createCorsOptionsResponse } from "@/lib/cors";

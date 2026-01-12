@@ -1,7 +1,7 @@
 import {
 	protectedProcedureWithOrganization,
 	createTRPCRouter,
-} from "@starter/core-web/src/trpc/trpc";
+} from "@plantiq/core-web/src/trpc/trpc";
 import {
 	getSalesMetrics as getSalesMetricsQuery,
 	getInventoryMetrics as getInventoryMetricsQuery,
@@ -11,9 +11,9 @@ import {
 	getInventoryReport as getInventoryReportQuery,
 	getProductionReport as getProductionReportQuery,
 	getFinancialReport as getFinancialReportQuery,
-} from "@starter/core/src/sql/queries/dashboard/queries";
+} from "@plantiq/core/src/sql/queries/dashboard/queries";
 import { TRPCError } from "@trpc/server";
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 import { z } from "zod";
 
 async function getSalesMetrics(ctx: Context) {

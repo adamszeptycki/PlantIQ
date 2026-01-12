@@ -1,17 +1,17 @@
-import { adminProcedure, createTRPCRouter } from "@starter/core-web/src/trpc/trpc";
+import { adminProcedure, createTRPCRouter } from "@plantiq/core-web/src/trpc/trpc";
 import { z } from "zod";
 import {
 	listUsersWithRoles as listUsersWithRolesQuery,
 	getUserErpRoles as getUserErpRolesQuery,
-} from "@starter/core/src/sql/queries/erp-roles/queries";
+} from "@plantiq/core/src/sql/queries/erp-roles/queries";
 import {
 	addUserErpRole as addUserErpRoleMutation,
 	removeUserErpRole as removeUserErpRoleMutation,
 	setUserErpRoles as setUserErpRolesMutation,
-} from "@starter/core/src/sql/queries/erp-roles/mutations";
-import { erpRoles } from "@starter/core/src/sql/schema/erp-roles";
+} from "@plantiq/core/src/sql/queries/erp-roles/mutations";
+import { erpRoles } from "@plantiq/core/src/sql/schema/erp-roles";
 import { TRPCError } from "@trpc/server";
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 
 async function listUsersWithRoles(ctx: Context) {
 	const organizationId = ctx.session?.session?.activeOrganizationId;

@@ -1,4 +1,4 @@
-# Starter Template
+# PlantIQ Template
 
 Minimal monorepo scaffold with Better Auth, tRPC, Drizzle, Next.js, and SST v3.
 Use this as a clean starting point for new projects.
@@ -26,7 +26,7 @@ Set env (example):
 ```
 BETTER_AUTH_SECRET=dev-secret
 RESEND_API_KEY=stub
-DB_URL=postgres://postgres:postgres@localhost:5937/starter
+DB_URL=postgres://postgres:postgres@localhost:5937/plantiq
 NEXT_PUBLIC_BASE_URL=https://localhost:3000
 BETTER_AUTH_URL=https://localhost:3000
 ```
@@ -40,8 +40,8 @@ BETTER_AUTH_URL=https://localhost:3000
 - Drizzle config in `packages/core`
 - Migrations directory is empty; generate your own:
   ```bash
-  pnpm --filter @starter/core db:generate:migrations
-  pnpm --filter @starter/core db:migrate:local
+  pnpm --filter @plantiq/core db:generate:migrations
+  pnpm --filter @plantiq/core db:migrate:local
   ```
 
 ## Notes
@@ -348,7 +348,7 @@ BETTER_AUTH_SECRET=ABB8qCQN85Gw6WsfDzadjlS7jjGgpY6yRBCb1WXLURjwpoi1mtwLZbNNu0KBg
 
 # PlantIQ ERP System
 
-A comprehensive Manufacturing ERP system built on top of the starter template, featuring full production planning, inventory management, sales, purchasing, and accounting capabilities.
+A comprehensive Manufacturing ERP system built on top of the plantiq template, featuring full production planning, inventory management, sales, purchasing, and accounting capabilities.
 
 ## ERP Features
 
@@ -486,7 +486,7 @@ The ERP adds 24 tables to the base schema:
 ## Documentation
 
 - **API Documentation**: See `docs/erp-api.md` for complete API reference with data flow diagrams
-- **Tests**: Run `pnpm --filter @starter/core test` for ERP tests
+- **Tests**: Run `pnpm --filter @plantiq/core test` for ERP tests
 
 ---
 

@@ -4,7 +4,7 @@ This file provides guidance when working with code in this repository.
 
 ## Project Overview
 
-Starter is a minimal monorepo template with SST v3, Next.js, Drizzle, tRPC, and Better Auth. All product-specific features have been removed so it can be used as a clean starting point.
+PlantIQ is a minimal monorepo template with SST v3, Next.js, Drizzle, tRPC, and Better Auth. All product-specific features have been removed so it can be used as a clean starting point.
 
 ## Architecture
 
@@ -33,11 +33,11 @@ pnpm dev
 pnpm typecheck
 
 # Database operations (adjust stage/urls as needed)
-pnpm --filter @starter/core db:migrate:local    # Run migrations locally
-pnpm --filter @starter/core db:generate:migrations  # Generate new migrations
+pnpm --filter @plantiq/core db:migrate:local    # Run migrations locally
+pnpm --filter @plantiq/core db:generate:migrations  # Generate new migrations
 
 # Run tests
-pnpm --filter @starter/core test
+pnpm --filter @plantiq/core test
 ```
 
 ### Extension Development

@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import * as DrizzleSchema from "@starter/core/src/sql/schema";
+import * as DrizzleSchema from "@plantiq/core/src/sql/schema";
 import { sql } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { drizzle } from "drizzle-orm/node-postgres";

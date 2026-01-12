@@ -1,6 +1,6 @@
-import { getDb } from "@starter/core/src/sql";
-import type { Organization } from "@starter/core/src/sql/schema/auth";
-import { members, organizations, users } from "@starter/core/src/sql/schema/auth";
+import { getDb } from "@plantiq/core/src/sql";
+import type { Organization } from "@plantiq/core/src/sql/schema/auth";
+import { members, organizations, users } from "@plantiq/core/src/sql/schema/auth";
 import { and, eq, ilike, or } from "drizzle-orm";
 
 type GetOrganizationBySlugArgs = {

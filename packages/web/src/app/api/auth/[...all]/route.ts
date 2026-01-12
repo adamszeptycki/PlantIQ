@@ -1,4 +1,4 @@
-import { auth } from "@starter/core-web/src/auth/auth";
+import { auth } from "@plantiq/core-web/src/auth/auth";
 import { toNextJsHandler } from "better-auth/next-js";
 import { type NextRequest } from "next/server";
 import { addCorsHeaders, createCorsOptionsResponse } from "@/lib/cors";

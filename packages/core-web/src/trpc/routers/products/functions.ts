@@ -1,14 +1,14 @@
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 import {
 	createProduct as createProductMutation,
 	deleteProduct as deleteProductMutation,
 	updateProduct as updateProductMutation,
-} from "@starter/core/src/sql/queries/products/mutations";
+} from "@plantiq/core/src/sql/queries/products/mutations";
 import {
 	countProducts as countProductsQuery,
 	getProductById as getProductByIdQuery,
 	listProducts as listProductsQuery,
-} from "@starter/core/src/sql/queries/products/queries";
+} from "@plantiq/core/src/sql/queries/products/queries";
 import { TRPCError } from "@trpc/server";
 import type { CreateProductArgs, ListProductsArgs, UpdateProductArgs } from "./schema";
 

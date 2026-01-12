@@ -1,3 +1,3 @@
 export function register() {
-	// No instrumentation configured in the starter template.
+	// No instrumentation configured in the plantiq template.
 }

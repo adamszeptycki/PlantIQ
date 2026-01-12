@@ -1,5 +1,5 @@
-import { getDb } from "@starter/core/src/sql";
-import { auditLogs, type InsertAuditLog } from "@starter/core/src/sql/schema/audit";
+import { getDb } from "@plantiq/core/src/sql";
+import { auditLogs, type InsertAuditLog } from "@plantiq/core/src/sql/schema/audit";
 
 /**
  * Create an audit log entry

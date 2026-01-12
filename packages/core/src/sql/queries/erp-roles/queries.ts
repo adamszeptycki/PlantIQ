@@ -1,6 +1,6 @@
-import { getDb } from "@starter/core/src/sql";
-import { userErpRoles, type ErpRole } from "@starter/core/src/sql/schema/erp-roles";
-import { users } from "@starter/core/src/sql/schema/auth";
+import { getDb } from "@plantiq/core/src/sql";
+import { userErpRoles, type ErpRole } from "@plantiq/core/src/sql/schema/erp-roles";
+import { users } from "@plantiq/core/src/sql/schema/auth";
 import { and, eq } from "drizzle-orm";
 
 /**

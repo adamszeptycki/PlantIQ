@@ -1,5 +1,5 @@
-import { getDb } from "@starter/core/src/sql";
-import { auth } from "@starter/core-web/src/auth/auth";
+import { getDb } from "@plantiq/core/src/sql";
+import { auth } from "@plantiq/core-web/src/auth/auth";
 
 export async function createTRPCContext(opts: { headers: Headers }) {
 	const session = await auth.api.getSession({

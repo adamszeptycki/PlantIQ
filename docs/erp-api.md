@@ -571,7 +571,7 @@ The test suite includes:
 
 Run tests with:
 ```bash
-pnpm --filter @starter/core test
+pnpm --filter @plantiq/core test
 ```
 
 ## Migration Management
@@ -580,12 +580,12 @@ Database migrations are managed via Drizzle Kit:
 
 ### Generate Migration
 ```bash
-pnpm --filter @starter/core db:generate:migrations
+pnpm --filter @plantiq/core db:generate:migrations
 ```
 
 ### Apply Migration
 ```bash
-pnpm --filter @starter/core db:migrate:local  # for local dev
+pnpm --filter @plantiq/core db:migrate:local  # for local dev
 ```
 
 ## Future Enhancements

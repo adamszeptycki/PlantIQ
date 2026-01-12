@@ -1,4 +1,4 @@
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 import {
 	addBomLineItem as addBomLineItemMutation,
 	createBom as createBomMutation,
@@ -17,7 +17,7 @@ import {
 	updateWorkOrder as updateWorkOrderMutation,
 	updateWorkOrderStatus as updateWorkOrderStatusMutation,
 	updateTimeEntry as updateTimeEntryMutation,
-} from "@starter/core/src/sql/queries/manufacturing/mutations";
+} from "@plantiq/core/src/sql/queries/manufacturing/mutations";
 import {
 	countBoms as countBomsQuery,
 	countManufacturingOrders as countManufacturingOrdersQuery,
@@ -30,7 +30,7 @@ import {
 	listBoms as listBomsQuery,
 	listManufacturingOrders as listManufacturingOrdersQuery,
 	listWorkOrders as listWorkOrdersQuery,
-} from "@starter/core/src/sql/queries/manufacturing/queries";
+} from "@plantiq/core/src/sql/queries/manufacturing/queries";
 import { TRPCError } from "@trpc/server";
 import type {
 	CreateBomArgs,

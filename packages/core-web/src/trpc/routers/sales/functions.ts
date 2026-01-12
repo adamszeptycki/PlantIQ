@@ -1,4 +1,4 @@
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 import {
 	addQuoteLineItem as addQuoteLineItemMutation,
 	addSalesOrderLineItem as addSalesOrderLineItemMutation,
@@ -23,7 +23,7 @@ import {
 	updateSalesOrder as updateSalesOrderMutation,
 	updateSalesOrderLineItem as updateSalesOrderLineItemMutation,
 	updateSalesOrderStatus as updateSalesOrderStatusMutation,
-} from "@starter/core/src/sql/queries/sales/mutations";
+} from "@plantiq/core/src/sql/queries/sales/mutations";
 import {
 	countCustomers as countCustomersQuery,
 	countLeads as countLeadsQuery,
@@ -39,7 +39,7 @@ import {
 	listLeads as listLeadsQuery,
 	listQuotes as listQuotesQuery,
 	listSalesOrders as listSalesOrdersQuery,
-} from "@starter/core/src/sql/queries/sales/queries";
+} from "@plantiq/core/src/sql/queries/sales/queries";
 import { TRPCError } from "@trpc/server";
 import type {
 	CreateCustomerArgs,

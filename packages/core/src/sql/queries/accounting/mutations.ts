@@ -1,4 +1,4 @@
-import { getDb } from "@starter/core/src/sql";
+import { getDb } from "@plantiq/core/src/sql";
 import {
 	chartOfAccounts,
 	journals,
@@ -15,7 +15,7 @@ import {
 	type InsertJournalEntry,
 	type InsertJournalEntryLine,
 	type InsertInvoice,
-} from "@starter/core/src/sql/schema";
+} from "@plantiq/core/src/sql/schema";
 import { and, eq, sql } from "drizzle-orm";
 
 // Chart of Accounts

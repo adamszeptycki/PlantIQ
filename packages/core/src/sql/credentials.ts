@@ -1,4 +1,4 @@
-import { getSecret } from "@starter/core/src/config/secret";
+import { getSecret } from "@plantiq/core/src/config/secret";
 
 type DatabaseCredentials = {
 	databaseUrl: string;

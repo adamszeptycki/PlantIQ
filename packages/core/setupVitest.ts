@@ -7,9 +7,9 @@ const fetchMock = createFetchMock(vi);
 
 fetchMock.enableMocks();
 // this entire mock setus up unit tests to use PGLite - so we don't have to worry about migrations and cleaning database for tests
-vi.mock("@starter/core/sql", async (importOriginal) => {
+vi.mock("@plantiq/core/sql", async (importOriginal) => {
     const { ...rest } =
-      await importOriginal<typeof import("@starter/core/sql")>()
+      await importOriginal<typeof import("@plantiq/core/sql")>()
     const { schema } = rest
     const { PGlite } = await vi.importActual<
       typeof import("@electric-sql/pglite")
@@ -44,7 +44,7 @@ vi.mock("@starter/core/sql", async (importOriginal) => {
 })
 
 async function cleanupDatabase() {
-    const { getDb } = await import("@starter/core/sql");
+    const { getDb } = await import("@plantiq/core/sql");
     const query = sql<string>`SELECT table_name
         FROM information_schema.tables
         WHERE table_schema = 'public'
@@ -67,19 +67,19 @@ afterEach(async () => {
 
 // mock getting secrets 
 
-vi.mock("@starter/core/config/secret", async () => {
+vi.mock("@plantiq/core/config/secret", async () => {
   return {
     getSecret: (key: string) => `test-${key}`
   }
 })
 
-vi.mock("@starter/core/config/resourceUrls", async () => {
+vi.mock("@plantiq/core/config/resourceUrls", async () => {
   return {
     getResourceUrl: (key: string) => `url-test-${key}`
   }
 })
 
-vi.mock("@starter/core/aws/sqs/sendMessage", async () => {
+vi.mock("@plantiq/core/aws/sqs/sendMessage", async () => {
   return {
     pushMessageToSQS: vi.fn().mockResolvedValue("test-message-id")
   }

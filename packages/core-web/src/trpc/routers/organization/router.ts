@@ -1,5 +1,5 @@
-import { roles } from "@starter/core/src/sql/schema";
-import { protectedProcedure, protectedProcedureWithOptionalOrganization, publicProcedure, router } from "@starter/core-web/src/trpc/trpc";
+import { roles } from "@plantiq/core/src/sql/schema";
+import { protectedProcedure, protectedProcedureWithOptionalOrganization, publicProcedure, router } from "@plantiq/core-web/src/trpc/trpc";
 import { z } from "zod";
 import * as organizationFunctions from "./functions";
 import { CreateTenantSchema } from "./schema";

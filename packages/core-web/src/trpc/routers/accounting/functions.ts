@@ -1,4 +1,4 @@
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 import {
 	createAccount as createAccountMutation,
 	updateAccount as updateAccountMutation,
@@ -8,7 +8,7 @@ import {
 	addJournalEntryLine as addJournalEntryLineMutation,
 	createInvoice as createInvoiceMutation,
 	updateInvoice as updateInvoiceMutation,
-} from "@starter/core/src/sql/queries/accounting/mutations";
+} from "@plantiq/core/src/sql/queries/accounting/mutations";
 import {
 	listAccounts as listAccountsQuery,
 	getAccountById as getAccountByIdQuery,
@@ -18,7 +18,7 @@ import {
 	getJournalEntryLines as getJournalEntryLinesQuery,
 	listInvoices as listInvoicesQuery,
 	getInvoiceById as getInvoiceByIdQuery,
-} from "@starter/core/src/sql/queries/accounting/queries";
+} from "@plantiq/core/src/sql/queries/accounting/queries";
 import { TRPCError } from "@trpc/server";
 import type {
 	CreateAccountArgs,

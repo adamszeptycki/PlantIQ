@@ -1,6 +1,6 @@
-import { getDb } from "@starter/core/src/sql";
-import { auditLogs } from "@starter/core/src/sql/schema/audit";
-import { users } from "@starter/core/src/sql/schema/auth";
+import { getDb } from "@plantiq/core/src/sql";
+import { auditLogs } from "@plantiq/core/src/sql/schema/audit";
+import { users } from "@plantiq/core/src/sql/schema/auth";
 import { and, desc, eq, sql } from "drizzle-orm";
 
 type ListAuditLogsArgs = {

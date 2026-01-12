@@ -1,7 +1,7 @@
 import {
 	financeProcedure,
 	createTRPCRouter,
-} from "@starter/core-web/src/trpc/trpc";
+} from "@plantiq/core-web/src/trpc/trpc";
 import { z } from "zod";
 import * as accountingFunctions from "./functions";
 import {

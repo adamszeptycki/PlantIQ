@@ -1,5 +1,5 @@
-import { getDb } from "@starter/core/src/sql";
-import { products, type Product } from "@starter/core/src/sql/schema";
+import { getDb } from "@plantiq/core/src/sql";
+import { products, type Product } from "@plantiq/core/src/sql/schema";
 import { and, desc, eq, ilike, or } from "drizzle-orm";
 
 export const getProductById = async (

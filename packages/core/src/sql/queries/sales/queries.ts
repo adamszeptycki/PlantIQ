@@ -1,4 +1,4 @@
-import { getDb } from "@starter/core/src/sql";
+import { getDb } from "@plantiq/core/src/sql";
 import {
 	customers,
 	leads,
@@ -12,7 +12,7 @@ import {
 	type QuoteLineItem,
 	type SalesOrder,
 	type SalesOrderLineItem,
-} from "@starter/core/src/sql/schema";
+} from "@plantiq/core/src/sql/schema";
 import { and, desc, eq, ilike, or } from "drizzle-orm";
 
 // Customers

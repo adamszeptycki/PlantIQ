@@ -61,7 +61,7 @@ export async function markUserAuthenticatedFromElectron({ ctx }: { ctx: Omit<Aut
 			});
 		}
 
-		// In the starter template we skip persistence and just acknowledge success.
+		// In the plantiq template we skip persistence and just acknowledge success.
 		return { success: true };
 	} catch (error) {
 		console.error("Error marking user as authenticated from Electron:", error);

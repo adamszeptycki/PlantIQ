@@ -1,4 +1,4 @@
-import { getDb } from "@starter/core/src/sql";
+import { getDb } from "@plantiq/core/src/sql";
 import {
 	locations,
 	stock,
@@ -8,7 +8,7 @@ import {
 	type Location,
 	type Stock,
 	type StockMove,
-} from "@starter/core/src/sql/schema";
+} from "@plantiq/core/src/sql/schema";
 import { and, eq, sql } from "drizzle-orm";
 
 // Locations

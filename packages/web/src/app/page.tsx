@@ -3,10 +3,10 @@ export default function Home() {
 		<div className="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-16">
 			<header className="flex flex-col gap-2">
 				<p className="text-sm uppercase tracking-wide text-slate-400">
-					Starter Template
+					PlantIQ Template
 				</p>
 				<h1 className="text-4xl font-semibold text-white">
-					Better Auth + tRPC + Drizzle + Next.js starter
+					Better Auth + tRPC + Drizzle + Next.js plantiq
 				</h1>
 				<p className="text-slate-300">
 					A minimal foundation with authentication, organizations, and a clean

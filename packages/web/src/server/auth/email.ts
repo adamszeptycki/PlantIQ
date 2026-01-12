@@ -1,4 +1,4 @@
-import { getEmailFrom } from "@starter/core/src/config/emailFrom";
+import { getEmailFrom } from "@plantiq/core/src/config/emailFrom";
 
 export const sendVerificationEmail = async ({
 	email,

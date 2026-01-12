@@ -1,17 +1,17 @@
-import type { Context } from "@starter/core-web/src/trpc/context";
+import type { Context } from "@plantiq/core-web/src/trpc/context";
 import {
 	adjustStock as adjustStockMutation,
 	createLocation as createLocationMutation,
 	createStockMove as createStockMoveMutation,
 	updateLocation as updateLocationMutation,
-} from "@starter/core/src/sql/queries/inventory/mutations";
+} from "@plantiq/core/src/sql/queries/inventory/mutations";
 import {
 	getLocationById as getLocationByIdQuery,
 	getStockByProduct as getStockByProductQuery,
 	listLocations as listLocationsQuery,
 	listStock as listStockQuery,
 	listStockMoves as listStockMovesQuery,
-} from "@starter/core/src/sql/queries/inventory/queries";
+} from "@plantiq/core/src/sql/queries/inventory/queries";
 import { TRPCError } from "@trpc/server";
 import type {
 	AdjustStockArgs,

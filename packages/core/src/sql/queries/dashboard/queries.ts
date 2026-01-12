@@ -1,4 +1,4 @@
-import { getDb } from "@starter/core/src/sql";
+import { getDb } from "@plantiq/core/src/sql";
 import {
 	salesOrders,
 	quotes,
@@ -8,7 +8,7 @@ import {
 	stock,
 	invoices,
 	purchaseOrders,
-} from "@starter/core/src/sql/schema";
+} from "@plantiq/core/src/sql/schema";
 import { and, between, count, eq, gte, lte, sql } from "drizzle-orm";
 
 // Sales Metrics

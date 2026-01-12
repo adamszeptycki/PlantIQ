@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { getDb } from "@starter/core/src/sql";
-import { auditLogs, products } from "@starter/core/src/sql/schema";
+import { getDb } from "@plantiq/core/src/sql";
+import { auditLogs, products } from "@plantiq/core/src/sql/schema";
 import { listAuditLogs } from "./queries";
 import { logCreate, logUpdate, logDelete } from "./mutations";
 import { createProduct } from "../products/mutations";

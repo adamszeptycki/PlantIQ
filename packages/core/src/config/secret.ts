@@ -6,9 +6,9 @@ const getSecret = (name: SecretName) => {
 	// In the template, fall back to placeholder values.
 	switch (name) {
 		case "DB_URL":
-			return "postgres://postgres:postgres@localhost:5937/starter";
+			return "postgres://postgres:postgres@localhost:5937/plantiq";
 		case "BETTER_AUTH_SECRET":
-			return "starter-better-auth-secret";
+			return "plantiq-better-auth-secret";
 		case "RESEND_API_KEY":
 			return "resend-api-placeholder";
 	}
