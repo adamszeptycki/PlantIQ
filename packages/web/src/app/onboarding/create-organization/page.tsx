@@ -39,7 +39,7 @@ export default function CreateTenantPage() {
 						<input
 							type="text"
 							required
-							className="mt-1 w-full rounded border px-3 py-2 text-sm text-black"
+							className="mt-1 w-full"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 						/>
@@ -49,7 +49,7 @@ export default function CreateTenantPage() {
 						<input
 							type="text"
 							required
-							className="mt-1 w-full rounded border px-3 py-2 text-sm text-black"
+							className="mt-1 w-full"
 							value={slug}
 							onChange={(e) => setSlug(e.target.value)}
 						/>

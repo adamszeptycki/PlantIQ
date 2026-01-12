@@ -43,7 +43,7 @@ export default function SignUpPage() {
 						<input
 							type="text"
 							required
-							className="mt-1 w-full rounded border px-3 py-2 text-sm text-black"
+							className="mt-1 w-full"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 						/>
@@ -53,7 +53,7 @@ export default function SignUpPage() {
 						<input
 							type="email"
 							required
-							className="mt-1 w-full rounded border px-3 py-2 text-sm text-black"
+							className="mt-1 w-full"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 						/>
@@ -63,7 +63,7 @@ export default function SignUpPage() {
 						<input
 							type="password"
 							required
-							className="mt-1 w-full rounded border px-3 py-2 text-sm text-black"
+							className="mt-1 w-full"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 						/>

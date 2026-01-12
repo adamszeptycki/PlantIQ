@@ -1,9 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, Suspense } from "react";
 
-export default function SignInPage() {
+function SignInForm() {
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -22,7 +24,7 @@ export default function SignInPage() {
 			if (!res.ok) {
 				throw new Error("Sign-in failed");
 			}
-			router.push("/dashboard");
+			router.push(callbackUrl);
 		} catch (err) {
 			setError((err as Error).message);
 		} finally {
@@ -40,7 +42,7 @@ export default function SignInPage() {
 						<input
 							type="email"
 							required
-							className="mt-1 w-full rounded border px-3 py-2 text-sm text-black"
+							className="mt-1 w-full"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 						/>
@@ -50,7 +52,7 @@ export default function SignInPage() {
 						<input
 							type="password"
 							required
-							className="mt-1 w-full rounded border px-3 py-2 text-sm text-black"
+							className="mt-1 w-full"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 						/>
@@ -69,5 +71,20 @@ export default function SignInPage() {
 				</p>
 			</div>
 		</div>
+	);
+}
+
+export default function SignInPage() {
+	return (
+		<Suspense fallback={
+			<div className="flex flex-1 items-center justify-center bg-background p-6">
+				<div className="w-full max-w-md rounded-lg border p-6 shadow-lg sm:p-8">
+					<h1 className="mb-4 text-center text-2xl font-bold">Sign In</h1>
+					<p className="text-center text-muted-foreground">Loading...</p>
+				</div>
+			</div>
+		}>
+			<SignInForm />
+		</Suspense>
 	);
 }
