@@ -13,17 +13,17 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "RESEND_API_KEY": {
-      "type": "sst.sst.Secret"
-      "value": string
-    }
-    "StarterRouter": {
+    "PlantIQRouter": {
       "type": "sst.aws.Router"
       "url": string
     }
-    "StarterWeb": {
+    "PlantIQWeb": {
       "type": "sst.aws.Nextjs"
       "url": string
+    }
+    "RESEND_API_KEY": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
   }
 }

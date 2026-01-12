@@ -12,13 +12,13 @@ class Resource:
     class DB_URL:
         type: str
         value: str
+    class PlantIQRouter:
+        type: str
+        url: str
+    class PlantIQWeb:
+        type: str
+        url: str
     class RESEND_API_KEY:
         type: str
         value: str
-    class StarterRouter:
-        type: str
-        url: str
-    class StarterWeb:
-        type: str
-        url: str
 

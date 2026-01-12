@@ -113,17 +113,64 @@ export async function rejectInvitation(
 }
 
 export async function getInvitation(
-	_ctx: PublicContext,
+	ctx: PublicContext,
 	input: { invitationId: string; email: string }
 ) {
-	return null;
+	const invitation = await auth.api.getInvitation({
+		query: { id: input.invitationId },
+		headers: ctx.headers,
+	});
+	if (!invitation || invitation.email !== input.email) {
+		return null;
+	}
+	return invitation;
 }
 
 export async function listInvitations(
 	ctx: ProtectedContext,
 	input: { status?: "pending" | "accepted" | "rejected" | "cancelled" }
 ) {
-	return [];
+	const activeOrg = await auth.api.getFullOrganization({
+		headers: ctx.headers,
+	});
+	if (!activeOrg) {
+		throw new TRPCError({
+			code: "UNAUTHORIZED",
+			message: "User does not have an active organization",
+		});
+	}
+	const invitations = await auth.api.listInvitations({
+		headers: ctx.headers,
+		query: {
+			organizationId: activeOrg.id,
+		},
+	});
+	if (!input.status) {
+		return invitations;
+	}
+	return invitations.filter((inv: any) => inv.status === input.status);
+}
+
+export async function removeMember(
+	ctx: ProtectedContext,
+	input: { memberId: string }
+) {
+	const activeOrg = await auth.api.getFullOrganization({
+		headers: ctx.headers,
+	});
+	if (!activeOrg) {
+		throw new TRPCError({
+			code: "UNAUTHORIZED",
+			message: "User does not have an active organization",
+		});
+	}
+	return auth.api.removeMember({
+		body: {
+			memberIdOrEmail: input.memberId,
+			organizationId: activeOrg.id,
+		},
+		headers: ctx.headers,
+	});
 }
 
 export async function listMembers(ctx: ProtectedContext, input: { search?: string|null }) {

@@ -17,10 +17,22 @@ export default function CreateTenantPage() {
 			const res = await fetch("/api/trpc/organization.create", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ name, domain: slug }),
+				body: JSON.stringify({ json: { name, domain: slug } }),
 				credentials: "include",
 			});
-			if (!res.ok) throw new Error("Organization creation failed");
+			const data = await res.json();
+			if (data.error) throw new Error(data.error.message || "Organization creation failed");
+
+			// Set the new org as active
+			const orgId = data.result?.data?.id;
+			if (orgId) {
+				await fetch("/api/trpc/organization.setCurrentOrganization", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ json: { organizationId: orgId } }),
+					credentials: "include",
+				});
+			}
 			router.push("/dashboard");
 		} catch (err) {
 			setError((err as Error).message);

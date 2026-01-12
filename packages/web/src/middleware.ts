@@ -3,8 +3,8 @@ import { type NextRequest, NextResponse } from "next/server";
 export default async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
-	// Protect all /erp/* routes
-	if (pathname.startsWith("/erp")) {
+	// Protect all /dashboard/* routes
+	if (pathname.startsWith("/dashboard")) {
 		// Check for session cookie (Better Auth uses 'kensaku.session_token' based on cookiePrefix)
 		const sessionCookie = request.cookies.get("kensaku.session_token");
 

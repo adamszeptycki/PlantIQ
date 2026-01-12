@@ -21,6 +21,11 @@ export const organizationRouter = router({
 	})).mutation(async ({ ctx, input }) => {
 		return organizationFunctions.updateMemberRole(ctx, input);
 	}),
+	removeMember: protectedProcedure.input(z.object({
+		memberId: z.string().uuid(),
+	})).mutation(async ({ ctx, input }) => {
+		return organizationFunctions.removeMember(ctx, input);
+	}),
 	inviteMember: protectedProcedure.input(z.object({
 		email: z.string().email(),
 		role: z.enum(roles),
