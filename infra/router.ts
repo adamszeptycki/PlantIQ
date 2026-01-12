@@ -5,10 +5,19 @@ export function getDomain({
 	let result: string;
 	switch ($app.stage) {
 		case "prod":
-			result = "starter-template.com";
+			result = "jetbridge.com";
+			break;
+		case "dev":
+		case "adam":
+		case "justme":
+			if (skipLocalhost) {
+				result = "jetbridge.click";
+			} else {
+				result = "http://localhost:3000";
+			}
 			break;
 		default:
-			result = skipLocalhost ? "starter-template.local" : "https://localhost:3000";
+			result = skipLocalhost ? "jetbridge.click" : "http://localhost:3000";
 	}
 	if (protocol && !result.startsWith("http")) {
 		result = `${protocol}://${result}`;

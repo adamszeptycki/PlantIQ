@@ -6,6 +6,7 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "pnpm run dev:adam",
     "dev:adam": "dotenvx run -f .env.dev -- sst dev --stage adam",
     "deploy:prod": "sst deploy --stage prod",
     "typecheck": "pnpm -r run typecheck",

@@ -346,4 +346,148 @@ BETTER_AUTH_SECRET=ABB8qCQN85Gw6WsfDzadjlS7jjGgpY6yRBCb1WXLURjwpoi1mtwLZbNNu0KBg
 
 ---
 
+# PlantIQ ERP System
+
+A comprehensive Manufacturing ERP system built on top of the starter template, featuring full production planning, inventory management, sales, purchasing, and accounting capabilities.
+
+## ERP Features
+
+- **Multi-tenant Architecture**: Complete data isolation per organization
+- **Role-Based Access Control**: 7 ERP roles with granular permissions
+- **Full Audit Trail**: Track all changes with before/after state
+- **Real-time Dashboard**: KPIs for Sales, Inventory, Production, and Finance
+- **Comprehensive Reporting**: Filterable reports with data visualization
+
+## ERP Module Pages
+
+### Dashboard (`/erp`)
+The main ERP dashboard displaying real-time metrics across all modules:
+- **Sales Metrics**: Total orders, confirmed orders, revenue, active quotes, customer count
+- **Inventory Metrics**: Total products, low stock alerts, stock value
+- **Production Metrics**: Manufacturing orders by status (in progress, confirmed, completed)
+- **Financial Metrics**: Accounts receivable, accounts payable, open purchase orders
+- **Quick Actions**: Create new sales orders, manufacturing orders, purchase orders
+
+### Products (`/erp/products`)
+Product catalog management:
+- `/erp/products` - Product list with search and filtering
+- `/erp/products/new` - Create new product
+- `/erp/products/[id]` - View/edit product details
+- **Fields**: SKU, name, description, type (storable/consumable/service), UOM, pricing, lead time, reorder settings
+
+### Inventory (`/erp/inventory`)
+Inventory and warehouse management:
+- `/erp/inventory` - Stock levels overview
+- `/erp/inventory/locations` - Warehouse locations
+- `/erp/inventory/moves` - Stock movement history
+- **Features**: Multi-location, lot tracking, stock adjustments, transfers
+
+### Sales (`/erp/sales`)
+Complete sales pipeline:
+- `/erp/sales/customers` - Customer master data
+- `/erp/sales/leads` - Lead management with status workflow
+- `/erp/sales/quotes` - Quotation management with line items
+- `/erp/sales/orders` - Sales order management
+- `/erp/sales/orders/new` - Create new sales order
+- **Workflow**: Lead → Quote → Sales Order → Invoice
+
+### Manufacturing (`/erp/manufacturing`)
+Production planning and execution:
+- `/erp/manufacturing/boms` - Bill of Materials management
+- `/erp/manufacturing/orders` - Manufacturing order list
+- `/erp/manufacturing/orders/new` - Create manufacturing order
+- `/erp/manufacturing/orders/[id]` - MO details with work orders
+- **Workflow**: Draft → Confirmed → In Progress → Done
+
+### Shop Floor (`/erp/shop-floor`)
+Mobile-optimized interface for production workers:
+- Work order execution with timer
+- Time entry logging
+- Production progress tracking
+- Touch-friendly interface
+
+### Purchasing (`/erp/purchasing`)
+Procurement management:
+- `/erp/purchasing/vendors` - Vendor master data
+- `/erp/purchasing/orders` - Purchase order list
+- `/erp/purchasing/orders/new` - Create purchase order
+- `/erp/purchasing/suggestions` - Smart purchase suggestions based on:
+  - Products below reorder point
+  - Component requirements from confirmed MOs
+- **Workflow**: Draft → Sent → Confirmed → Received
+
+### Accounting (`/erp/accounting`)
+Financial management:
+- `/erp/accounting` - Accounting dashboard with balance summaries
+- `/erp/accounting/accounts` - Chart of accounts (44 standard accounts)
+- `/erp/accounting/journals` - Journal management (Sales, Purchase, General, etc.)
+- `/erp/accounting/entries` - Journal entries with posting
+- `/erp/accounting/invoices` - Customer and vendor invoices
+- **Features**: Double-entry bookkeeping, automatic balance updates
+
+### Reports (`/erp/reports`)
+Business intelligence and reporting:
+- **Sales Report**: Orders by status, top 10 customers
+- **Inventory Report**: Product stock levels with low stock highlighting
+- **Production Report**: MOs by status, top 10 products
+- **Financial Report**: Revenue/expense summaries, invoices by status
+- All reports support date range filtering
+
+### Admin (`/erp/admin`)
+System administration (admin role required):
+- `/erp/admin/audit` - Audit trail viewer
+  - Filter by entity type
+  - View before/after state for changes
+  - Track all create, update, delete actions
+- `/erp/admin/users` - User role management
+  - Assign/remove ERP roles to users
+  - Visual role editor with descriptions
+
+## ERP Roles
+
+| Role | Access |
+|------|--------|
+| `admin` | Full access to all modules |
+| `sales` | Customers, leads, quotes, sales orders |
+| `planner` | Products, inventory, production planning |
+| `buyer` | Vendors, purchase orders, suggestions |
+| `worker` | Shop floor, work orders, time entries |
+| `supervisor` | Manufacturing orders, work order supervision |
+| `finance` | Accounting, journals, invoices |
+
+## API Structure
+
+All ERP APIs use tRPC with role-based middleware:
+
+```
+/api/trpc/
+├── products.*       (planner, admin)
+├── inventory.*      (planner, admin)
+├── sales.*          (sales, admin)
+├── manufacturing.*  (supervisor, admin)
+├── purchasing.*     (buyer, admin)
+├── accounting.*     (finance, admin)
+├── dashboard.*      (any authenticated)
+├── audit.*          (admin only)
+└── erpRoles.*       (admin only)
+```
+
+## Database Schema
+
+The ERP adds 24 tables to the base schema:
+- **Products**: products
+- **Inventory**: locations, lots, stock, stock_moves
+- **Sales**: customers, leads, quotes, quote_line_items, sales_orders, sales_order_line_items
+- **Manufacturing**: boms, bom_line_items, manufacturing_orders, work_orders, time_entries
+- **Purchasing**: vendors, product_vendors, purchase_orders, purchase_order_line_items
+- **Accounting**: chart_of_accounts, journals, journal_entries, journal_entry_lines, invoices
+- **System**: user_erp_roles, audit_logs
+
+## Documentation
+
+- **API Documentation**: See `docs/erp-api.md` for complete API reference with data flow diagrams
+- **Tests**: Run `pnpm --filter @starter/core test` for ERP tests
+
+---
+
 Built with ❤️ using [SST](https://sst.dev), [Next.js](https://nextjs.org), and [pnpm workspaces](https://pnpm.io)
