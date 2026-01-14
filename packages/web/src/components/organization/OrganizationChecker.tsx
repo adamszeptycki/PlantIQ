@@ -29,11 +29,25 @@ export function OrganizationChecker({ children }: OrganizationCheckerProps) {
 			const res = await fetch("/api/trpc/organization.listUserOrganizations", {
 				credentials: "include",
 			});
+
+			// Handle unauthorized - redirect to login
+			if (res.status === 401) {
+				const callbackUrl = encodeURIComponent(window.location.pathname);
+				router.push(`/auth/sign-in?callbackUrl=${callbackUrl}`);
+				return;
+			}
+
 			const data = await res.json();
 
 			// Handle error response
 			if (data.error) {
 				console.error("API error:", data.error);
+				// Check if it's an auth error
+				if (data.error.message === "UNAUTHORIZED" || data.error.code === "UNAUTHORIZED") {
+					const callbackUrl = encodeURIComponent(window.location.pathname);
+					router.push(`/auth/sign-in?callbackUrl=${callbackUrl}`);
+					return;
+				}
 				router.push("/onboarding/create-organization");
 				return;
 			}

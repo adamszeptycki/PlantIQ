@@ -10,7 +10,8 @@
     "db:up": "docker-compose up -d && sleep 3 && docker-compose exec -T core-airframe-db createdb -U postgres plantiq",
     "typecheck": "tsc --noEmit --strict",
     "db:migrate:local": "dotenvx run -f .env.dev -- drizzle-kit migrate",
-    "db:generate:migrations": "dotenvx run -f .env.dev -- drizzle-kit generate"
+    "db:generate:migrations": "dotenvx run -f .env.dev -- drizzle-kit generate",
+    "db:migrate:prod": "sst shell --stage prod drizzle-kit migrate"
   },
   "exports": {
     "./*": [

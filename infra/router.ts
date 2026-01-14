@@ -1,3 +1,6 @@
+const baseUrl = "plantiq.jetbridge.click";
+const LOCAL_URL = "http://localhost:3000";
+
 export function getDomain({
 	protocol,
 	skipLocalhost,
@@ -5,19 +8,19 @@ export function getDomain({
 	let result: string;
 	switch ($app.stage) {
 		case "prod":
-			result = "jetbridge.com";
+			result = baseUrl;
 			break;
 		case "dev":
 		case "adam":
 		case "justme":
 			if (skipLocalhost) {
-				result = "jetbridge.click";
+				result = baseUrl;
 			} else {
-				result = "http://localhost:3000";
+				result = LOCAL_URL;
 			}
 			break;
 		default:
-			result = skipLocalhost ? "jetbridge.click" : "http://localhost:3000";
+			result = skipLocalhost ? baseUrl : LOCAL_URL;
 	}
 	if (protocol && !result.startsWith("http")) {
 		result = `${protocol}://${result}`;

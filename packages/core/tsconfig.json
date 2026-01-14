@@ -10,6 +10,6 @@
 		},
     "types": ["vitest/globals"]
   },
-  "include": ["src/sql/**/*", "src/config/**/*", "src/index.ts"],
+  "include": ["sst-env.d.ts", "src/sql/**/*", "src/config/**/*", "src/index.ts"],
   "exclude": ["src/aws", "src/domain", "src/graphdb", "src/sql/seed", "src/test", "setupVitest.ts"]
 }
